@@ -1,0 +1,23 @@
+name: video_js_player
+description: "A new Flutter package project."
+version: 0.0.1
+homepage: null
+
+environment:
+  sdk: ">=3.4.3 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  visibility_detector: ^0.4.0+2
+  webview_flutter: ^4.8.0
+  webview_flutter_android: ^3.16.4
+  webview_flutter_wkwebview: ^3.13.1
+
+dev_dependencies:
+  flutter_lints: ^3.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter: null
