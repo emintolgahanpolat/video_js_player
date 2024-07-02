@@ -152,16 +152,16 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
                             child: Center(
                               child: Row(
                                 children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      Navigator.of(context, rootNavigator: true)
-                                          .pop();
-                                    },
-                                    icon: const Icon(
-                                      Icons.keyboard_arrow_down_rounded,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                  // IconButton(
+                                  //   onPressed: () {
+                                  //     Navigator.of(context, rootNavigator: true)
+                                  //         .pop();
+                                  //   },
+                                  //   icon: const Icon(
+                                  //     Icons.keyboard_arrow_down_rounded,
+                                  //     color: Colors.white,
+                                  //   ),
+                                  // ),
                                   const Spacer(),
                                   IconButton(
                                     onPressed: () {

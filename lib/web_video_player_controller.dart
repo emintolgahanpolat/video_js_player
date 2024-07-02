@@ -82,6 +82,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
             padding: 0;
           height: 100%;
            overflow: hidden;
+          background-color:black;
         }
 
         .video-js {
@@ -99,7 +100,6 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
             web browser that
         </p>
     </video>
-
     <script src="https://vjs.zencdn.net/8.12.0/video.min.js"></script>
     <script>
         var player = videojs("videoPlayer", {

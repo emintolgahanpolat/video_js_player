@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: const Text("Video JS"),
         ),
-        body: Column(
+        body: ListView(
           children: [
             WebPlayer(
                 source: WebPlayerSource.videoJs(
