@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> {
         return CustomWebPlayerController(controller);
       },
     ));
+
     super.initState();
   }
 
@@ -53,6 +54,16 @@ class _HomePageState extends State<HomePage> {
             return Scaffold(
                 appBar: AppBar(
                   title: const Text("Video JS"),
+                  actions: [
+                    IconButton(
+                        onPressed: () {
+                          controller.toggleFullScreenMode();
+                        },
+                        icon: const Icon(
+                          Icons.fullscreen,
+                          color: Colors.red,
+                        ))
+                  ],
                 ),
                 body: ListView(
                   children: [
@@ -60,7 +71,6 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 24,
                     ),
-                    const Text("Vİdeo Player")
                   ],
                 ));
           }),

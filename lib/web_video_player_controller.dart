@@ -170,6 +170,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
 """);
   }
 
+  void updateValue(WebPlayerValue newValue) => value = newValue;
   void toggleFullScreenMode() {
     value.isFullScreen = !value.isFullScreen;
     if (value.isFullScreen) {
@@ -332,4 +333,22 @@ class WebPlayerValue {
     this.isInPictureInPicture,
     this.isTracking,
   );
+
+  WebPlayerValue copyWith({
+    double? currentTime,
+    double? duration,
+    bool? isPaused,
+    bool? isFullScreen,
+    bool? isInPictureInPicture,
+    bool? isTracking,
+  }) {
+    return WebPlayerValue(
+      currentTime ?? this.currentTime,
+      duration ?? this.duration,
+      isPaused ?? this.isPaused,
+      isFullScreen ?? this.isFullScreen,
+      isInPictureInPicture ?? this.isInPictureInPicture,
+      isTracking ?? this.isTracking,
+    );
+  }
 }

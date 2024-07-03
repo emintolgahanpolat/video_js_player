@@ -38,21 +38,10 @@ class _WebPlayerState extends State<WebPlayer> {
         aspectRatio: 16 / 9,
         child: Stack(
           children: [
-            Container(
-                color: Colors.blue,
-                child: WebViewWidget(
-                    controller: _videoPlayerController.webViewController)),
+            WebViewWidget(controller: _videoPlayerController.webViewController),
             if (_videoPlayerController.source?.customControlsBuilder != null)
               _videoPlayerController.source!.customControlsBuilder!
                   .call(_videoPlayerController),
-            IconButton(
-                onPressed: () {
-                  _videoPlayerController.toggleFullScreenMode();
-                },
-                icon: const Icon(
-                  Icons.fullscreen,
-                  color: Colors.red,
-                ))
           ],
         ),
       ),
