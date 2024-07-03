@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_js_player/logger.dart';
 import 'package:video_js_player/web_video_player_source.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -37,15 +38,15 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
         } catch (e) {
           Log.e(e.toString(), tag: "Parse Error");
         }
-        print(mData.toString());
+        Log.i(mData.toString());
 
         value = WebPlayerValue(
             double.tryParse(mData[0]) ?? 0,
             double.tryParse(mData[1]) ?? 0,
             bool.tryParse(mData[2]) ?? false,
+            value.isFullScreen,
             bool.tryParse(mData[3]) ?? false,
-            bool.tryParse(mData[4]) ?? false,
-            bool.tryParse(mData[5]) ?? true);
+            bool.tryParse(mData[4]) ?? true);
       })
       ..setBackgroundColor(Colors.transparent)
       ..enableZoom(false);
@@ -66,7 +67,10 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
     }
   }
 
+  WebPlayerSource? _source;
+  WebPlayerSource? get source => _source;
   Future<void> videoJs(WebPlayerSource source) {
+    _source = source;
     return webViewController.loadHtmlString("""
   <head>
 
@@ -82,7 +86,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
             padding: 0;
           height: 100%;
            overflow: hidden;
-          background-color:black;
+         /* background-color:black;*/
         }
 
         .video-js {
@@ -111,7 +115,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
           if(duration === Infinity){
            duration = 0
           }
-          PlayerInfo.postMessage([player.currentTime(), duration ,player.paused(),player.isFullscreen(),player.isInPictureInPicture(), player.liveTracker.isTracking()]);
+          PlayerInfo.postMessage([player.currentTime(), duration ,player.paused(),player.isInPictureInPicture(), player.liveTracker.isTracking()]);
           
           });
         player.on("error", (event) => {  PlayerError.postMessage('${source.url} Error');});
@@ -125,6 +129,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   }
 
   Future<void> iframe(WebPlayerSource source) {
+    _source = source;
     webViewController.setNavigationDelegate(NavigationDelegate(
       onNavigationRequest: (NavigationRequest request) async {
         if (request.url == "about:blank" || request.url == source.url) {
@@ -163,6 +168,18 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
 
 </body>
 """);
+  }
+
+  void toggleFullScreenMode() {
+    value.isFullScreen = !value.isFullScreen;
+    if (value.isFullScreen) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    } else {
+      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    }
   }
 
   Future<void> seekTo(double timeInSecond) {

@@ -30,31 +30,40 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var controller = WebVideoPlayerController();
+  @override
+  void initState() {
+    controller.load(WebPlayerSource.videoJs(
+      "https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8",
+      autoPlay: true,
+      poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
+      customControlsBuilder: (controller) {
+        return CustomWebPlayerController(controller);
+      },
+    ));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Video JS"),
-        ),
-        body: ListView(
-          children: [
-            WebPlayer(
-                source: WebPlayerSource.videoJs(
-              "https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8",
-              autoPlay: true,
-              poster:
-                  "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
-              customControlsBuilder: (controller) {
-                return CustomWebPlayerController(controller);
-              },
-            )),
-            WebPlayer(
-                source: WebPlayerSource.videoJs(
-              "https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8",
-              poster:
-                  "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
-            )),
-          ],
-        ));
+    return Material(
+      child: WebPlayerBuilder(
+          player: WebPlayer(controller: controller),
+          builder: (c, p) {
+            return Scaffold(
+                appBar: AppBar(
+                  title: const Text("Video JS"),
+                ),
+                body: ListView(
+                  children: [
+                    p,
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    const Text("Vİdeo Player")
+                  ],
+                ));
+          }),
+    );
   }
 }

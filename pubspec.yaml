@@ -10,7 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_inappwebview: ^6.0.0
   visibility_detector: ^0.4.0+2
   webview_flutter: ^4.8.0
   webview_flutter_android: ^3.16.4
