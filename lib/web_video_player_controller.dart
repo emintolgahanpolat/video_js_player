@@ -184,6 +184,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   }
 
   Future<void> seekTo(double timeInSecond) {
+    value = value.copyWith(currentTime: timeInSecond);
     return webViewController
         .runJavaScript('    player.currentTime($timeInSecond);');
   }
