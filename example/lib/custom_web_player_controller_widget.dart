@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:video_js_player/web_video_player_controller.dart';
 
@@ -45,17 +46,6 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
     } else {
       timer?.cancel();
     }
-  }
-
-  String _formatDuration(double duration) {
-    int totalSeconds = duration.toInt();
-    int minutes = totalSeconds ~/ 60;
-    int seconds = totalSeconds % 60;
-
-    String minutesStr = minutes.toString().padLeft(2, '0');
-    String secondsStr = seconds.toString().padLeft(2, '0');
-
-    return '$minutesStr:$secondsStr';
   }
 
   Widget _buildDubbingSubtitleDialog(
@@ -268,28 +258,32 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
                               left: 8,
                               right: 8,
                               bottom: 8,
-                              child: Row(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  Expanded(
-                                    child: Slider(
-                                      value:
-                                          (value.currentTime / value.duration)
-                                              .clamp(0, 1),
-                                      min: 0,
-                                      max: 1,
-                                      onChanged: (v) {
-                                        controller.seekTo(v * value.duration);
+                                  ProgressBar(
+                                      progress: Duration(
+                                          seconds: value.currentTime.toInt()),
+                                      total: Duration(
+                                          seconds: value.duration.toInt()),
+                                      progressBarColor: Colors.red,
+                                      baseBarColor:
+                                          Colors.white.withOpacity(0.24),
+                                      bufferedBarColor:
+                                          Colors.white.withOpacity(0.24),
+                                      thumbColor: Colors.white,
+                                      barHeight: 3.0,
+                                      thumbRadius: 5.0,
+                                      onSeek: (v) {
+                                        controller
+                                            .seekTo(v.inSeconds.toDouble());
                                       },
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    '${_formatDuration(value.currentTime)}/${_formatDuration(value.duration)}',
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 12),
-                                  ),
+                                      timeLabelTextStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                      timeLabelLocation:
+                                          TimeLabelLocation.below),
                                 ],
                               ),
                             )

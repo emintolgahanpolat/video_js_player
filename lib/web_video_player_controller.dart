@@ -99,14 +99,12 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   <body>
     <video id="videoPlayer" class="video-js" controls playsinline preload="auto"  >
         <source src="${source.url}" type="application/x-mpegURL" />
-        <p class="vjs-no-js">
-            To view this video please enable JavaScript, and consider upgrading to a
-            web browser that
-        </p>
+      
     </video>
     <script src="https://vjs.zencdn.net/8.12.0/video.min.js"></script>
     <script>
         var player = videojs("videoPlayer", {
+            errorDisplay: false,
             autoplay:${source.autoPlay},
             controls: ${source.customControlsBuilder == null},
         });
