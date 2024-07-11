@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:video_js_player/logger.dart';
 import 'package:video_js_player/web_video_player_source.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+
+typedef WebPlayerErrorListerner = void Function(String message);
 
 class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   late WebViewController _webViewController;
@@ -27,7 +28,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
     _webViewController = WebViewController.fromPlatformCreationParams(params)
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel("PlayerError", onMessageReceived: (params) {
-        Log.e(params.message.toString());
+        _errorListerner?.call(params.message.toString());
       })
       ..addJavaScriptChannel("PlayerInfo", onMessageReceived: (params) {
         List<String> mData = ["0", "0", "false", "false", "false", "true"];
@@ -35,10 +36,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
           mData = (jsonDecode(params.message) as List)
               .map<String>((item) => item.toString())
               .toList();
-        } catch (e) {
-          Log.e(e.toString(), tag: "Parse Error");
-        }
-        Log.i(mData.toString());
+        } catch (e) {}
 
         value = WebPlayerValue(
             double.tryParse(mData[0]) ?? 0,
@@ -56,6 +54,10 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
       (_webViewController.platform as AndroidWebViewController)
           .setMediaPlaybackRequiresUserGesture(false);
     }
+  }
+  WebPlayerErrorListerner? _errorListerner;
+  void setErrorListener(WebPlayerErrorListerner listener) {
+    _errorListerner = listener;
   }
 
   Future<void> load(WebPlayerSource source) {
@@ -110,13 +112,16 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
         });
           player.on(['durationchange', 'timeupdate', 'paused','play','enterpictureinpicture', 'leavepictureinpicture'], (event) => {  
           var duration = player.duration(); 
-          if(duration === Infinity){
+          if(duration === Infinity || isNaN(duration)){
            duration = 0
           }
           PlayerInfo.postMessage([player.currentTime(), duration ,player.paused(),player.isInPictureInPicture(), player.liveTracker.isTracking()]);
           
           });
-        player.on("error", (event) => {  PlayerError.postMessage('${source.url} Error');});
+        player.on("error", (event) => {  
+           var error = player.error();
+          PlayerError.postMessage(error.message);
+        });
     </script>
   </body>
 """);

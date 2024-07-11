@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:video_js_player/logger.dart';
 import 'package:video_js_player/web_video_player_controller.dart';
 
 class WebPlayerVideoSource {
@@ -65,9 +64,7 @@ class WebPlayerSource {
     List<WebPlayerVideoTrack>? tracks,
   })  : _sources = sources,
         _tracks = tracks,
-        autoPlay = autoPlay ?? false {
-    Log.i(url ?? type.name);
-  }
+        autoPlay = autoPlay ?? false;
   static WebPlayerSource withUrl(
     String url, {
     String? poster,
