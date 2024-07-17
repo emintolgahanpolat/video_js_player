@@ -17,7 +17,32 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const WelcomePage(),
+    );
+  }
+}
+
+class WelcomePage extends StatelessWidget {
+  const WelcomePage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Player"),
+      ),
+      body: Column(
+        children: [
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const HomePage()));
+              },
+              child: const Text("Open Player"))
+        ],
+      ),
     );
   }
 }
@@ -48,7 +73,7 @@ class _HomePageState extends State<HomePage> {
               ));
     });
     controller.load(WebPlayerSource.videoJs(
-      "http://cfd-v4-service-channel-stitcher-use1-1.prd..tv/stitch/hls/channel/62ba60f059624e000781c436/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=6c25e430-30d3-11ef-9cf5-e9ddff8ff496&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=1b7de8e4-d114-4438-b098-6f7aee77b4be",
+      "https://github.com/emintolgahanpolat/sample_video/raw/main/video_0.mp4",
       autoPlay: true,
       poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
       customControlsBuilder: (controller) {

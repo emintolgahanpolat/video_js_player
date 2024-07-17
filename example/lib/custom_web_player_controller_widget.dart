@@ -147,7 +147,7 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
                                       controller.toggleFullScreenMode();
                                     },
                                     icon: const Icon(
-                                      Icons.keyboard_arrow_down_rounded,
+                                      Icons.crop_rotate_rounded,
                                       color: Colors.white,
                                     ),
                                   ),

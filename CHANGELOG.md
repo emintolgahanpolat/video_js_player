@@ -1,3 +1,7 @@
+## 0.0.3
+
+- Fullscreen bugfix
+
 ## 0.0.2
 
 - Added ErrorListener

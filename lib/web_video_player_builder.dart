@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:video_js_player/web_video_player.dart';
 
@@ -68,13 +69,10 @@ class _WebPlayerBuilderState extends State<WebPlayerBuilder>
     final player = Container(
       key: playerKey,
       child: PopScope(
-        canPop: false,
+        canPop: !widget.player.controller.value.isFullScreen,
         onPopInvoked: (didPop) {
-          final controller = widget.player.controller;
-          if (controller.value.isFullScreen) {
+          if (!didPop) {
             widget.player.controller.toggleFullScreenMode();
-          } else {
-            Navigator.pop(context);
           }
         },
         child: widget.player,
