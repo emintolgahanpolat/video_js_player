@@ -22,10 +22,19 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
   const WelcomePage({
     super.key,
   });
+
+  @override
+  State<WelcomePage> createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+  final TextEditingController _editingController = TextEditingController(
+      text:
+          "https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8");
 
   @override
   Widget build(BuildContext context) {
@@ -33,22 +42,37 @@ class WelcomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Player"),
       ),
-      body: Column(
-        children: [
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const HomePage()));
-              },
-              child: const Text("Open Player"))
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextFormField(
+              controller: _editingController,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => HomePage(
+                                url: _editingController.text,
+                              )));
+                },
+                child: const Text("Open Player"))
+          ],
+        ),
       ),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String url;
+  const HomePage({super.key, required this.url});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -59,6 +83,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     controller.setErrorListener((error) {
+      print(error);
       showAdaptiveDialog(
           context: context,
           builder: (c) => AlertDialog(
@@ -73,7 +98,7 @@ class _HomePageState extends State<HomePage> {
               ));
     });
     controller.load(WebPlayerSource.videoJs(
-      "https://github.com/emintolgahanpolat/sample_video/raw/main/video_0.mp4",
+      widget.url,
       autoPlay: true,
       poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
       customControlsBuilder: (controller) {

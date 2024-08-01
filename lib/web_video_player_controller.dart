@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_js_player/web_video_player_source.dart';
@@ -106,7 +107,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
     <script src="https://vjs.zencdn.net/8.12.0/video.min.js"></script>
     <script>
         var player = videojs("videoPlayer", {
-            errorDisplay: false,
+            errorDisplay: $kDebugMode,
             autoplay:${source.autoPlay},
             controls: ${source.customControlsBuilder == null},
         });

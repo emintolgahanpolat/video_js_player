@@ -1,3 +1,7 @@
+## 0.0.4
+
+- Fullscreen bugfix
+
 ## 0.0.3
 
 - Fullscreen bugfix
