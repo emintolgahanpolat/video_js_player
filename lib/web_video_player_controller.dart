@@ -112,7 +112,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
     <script src="https://vjs.zencdn.net/8.12.0/video.min.js"></script>
     <script>
         var player = videojs("videoPlayer", {
-            errorDisplay: true,
+            errorDisplay: $kDebugMode,
             autoplay:${source.autoPlay},
             controls: ${source.customControlsBuilder == null},
          
