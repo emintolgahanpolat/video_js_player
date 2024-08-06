@@ -32,12 +32,15 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
         _errorListerner?.call(params.message.toString());
       })
       ..addJavaScriptChannel("PlayerInfo", onMessageReceived: (params) {
+        print("Player Info Message : ${params.message}");
         List<String> mData = ["0", "0", "false", "false", "false", "true"];
         try {
           mData = (jsonDecode(params.message) as List)
               .map<String>((item) => item.toString())
               .toList();
-        } catch (e) {}
+        } catch (e) {
+          print(e);
+        }
 
         value = WebPlayerValue(
             double.tryParse(mData[0]) ?? 0,
@@ -94,29 +97,37 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
 
         .video-js {
             width: 100%;
-            height: 100%;
+            height: 100%;   
+             background-color:black;
+             content: none;
         }
     </style>
   </head>
 
   <body>
-    <video id="videoPlayer" class="video-js" controls playsinline preload="auto"  >
+    <video id="videoPlayer" class="video-js" poster="${source.poster}" controls playsinline preload="auto"  >
         <source src="${source.url}" type="application/x-mpegURL" />
       
     </video>
     <script src="https://vjs.zencdn.net/8.12.0/video.min.js"></script>
     <script>
         var player = videojs("videoPlayer", {
-            errorDisplay: $kDebugMode,
+            errorDisplay: true,
             autoplay:${source.autoPlay},
             controls: ${source.customControlsBuilder == null},
+         
         });
           player.on(['durationchange', 'timeupdate', 'paused','play','enterpictureinpicture', 'leavepictureinpicture'], (event) => {  
           var duration = player.duration(); 
           if(duration === Infinity || isNaN(duration)){
            duration = 0
           }
-          PlayerInfo.postMessage([player.currentTime(), duration ,player.paused(),player.isInPictureInPicture(), player.liveTracker.isTracking()]);
+          var currentTime = player.currentTime()
+          if(currentTime === Infinity || isNaN(currentTime)){
+           currentTime = 0
+          }
+         
+          PlayerInfo.postMessage(JSON.stringify([currentTime, duration ,player.paused(),player.isInPictureInPicture(), player.liveTracker.isTracking()]));
           
           });
         player.on("error", (event) => {  
