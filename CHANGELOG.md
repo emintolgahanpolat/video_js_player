@@ -1,3 +1,7 @@
+## 0.0.8
+
+- Added bufferPercent
+
 ## 0.0.7
 
 - Added bufferPercent

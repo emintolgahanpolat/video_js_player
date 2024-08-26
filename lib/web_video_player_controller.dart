@@ -33,7 +33,15 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
       })
       ..addJavaScriptChannel("PlayerInfo", onMessageReceived: (params) {
         print("Player Info Message : ${params.message}");
-        List<String> mData = ["0", "0", "0", "false", "false", "false", "true"];
+        List<String> mData = [
+          "0",
+          "0",
+          "0",
+          "false",
+          "false",
+          "false",
+          "false"
+        ];
         try {
           mData = (jsonDecode(params.message) as List)
               .map<String>((item) => item.toString())
@@ -49,7 +57,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
             bool.tryParse(mData[3]) ?? false,
             value.isFullScreen,
             bool.tryParse(mData[4]) ?? false,
-            bool.tryParse(mData[5]) ?? true);
+            bool.tryParse(mData[5]) ?? false);
       })
       ..setBackgroundColor(Colors.transparent)
       ..enableZoom(false);
@@ -128,8 +136,8 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
            currentTime = 0
           }
           var bufferedPercent = player.bufferedPercent();
-          if(bufferedPercent === Infinity || isNaN(bufferTime)){
-           bufferedPercent = 0
+          if(bufferedPercent === Infinity || isNaN(bufferedPercent)) {
+            bufferedPercent = 0;
           }
 
           PlayerInfo.postMessage(JSON.stringify([currentTime, duration, bufferedPercent ,player.paused(),player.isInPictureInPicture(), player.liveTracker.isTracking()]));
@@ -210,7 +218,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   Future<void> seekTo(double timeInSecond) {
     value = value.copyWith(currentTime: timeInSecond);
     return webViewController
-        .runJavaScript('    player.currentTime($timeInSecond);');
+        .runJavaScript('player.currentTime($timeInSecond);');
   }
 
   Future<void> play() {

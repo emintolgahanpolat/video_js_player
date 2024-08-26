@@ -254,44 +254,42 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
                               ),
                             ),
                           ),
-                          if (!value.isTracking)
-                            Positioned(
-                              left: 8,
-                              right: 8,
-                              bottom: 8,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  ProgressBar(
-                                      progress: Duration(
-                                          seconds: value.currentTime.toInt()),
-                                      total: Duration(
-                                          seconds: value.duration.toInt()),
-                                      buffered: Duration(
-                                          seconds: (value.bufferedPercent *
-                                                  value.duration)
-                                              .toInt()),
-                                      progressBarColor: Colors.red,
-                                      baseBarColor:
-                                          Colors.white.withOpacity(0.24),
-                                      bufferedBarColor:
-                                          Colors.white.withOpacity(0.24),
-                                      thumbColor: Colors.white,
-                                      barHeight: 20.0,
-                                      thumbRadius: 10.0,
-                                      onSeek: (v) {
-                                        controller
-                                            .seekTo(v.inSeconds.toDouble());
-                                      },
-                                      timeLabelTextStyle: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                      timeLabelLocation:
-                                          TimeLabelLocation.below),
-                                ],
-                              ),
-                            )
+                          // if (!value.isTracking)
+                          Positioned(
+                            left: 8,
+                            right: 8,
+                            bottom: 8,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                ProgressBar(
+                                    progress: Duration(
+                                        seconds: value.currentTime.toInt()),
+                                    total: Duration(
+                                        seconds: value.duration.toInt()),
+                                    buffered: Duration(
+                                        seconds: (value.bufferedPercent *
+                                                value.duration)
+                                            .toInt()),
+                                    progressBarColor: Colors.red,
+                                    baseBarColor:
+                                        Colors.white.withOpacity(0.24),
+                                    bufferedBarColor:
+                                        Colors.white.withOpacity(0.24),
+                                    thumbColor: Colors.white,
+                                    barHeight: 20.0,
+                                    thumbRadius: 10.0,
+                                    onSeek: (v) {
+                                      controller.seekTo(v.inSeconds.toDouble());
+                                    },
+                                    timeLabelTextStyle: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
+                                    timeLabelLocation: TimeLabelLocation.below),
+                              ],
+                            ),
+                          )
                         ],
                       );
                     })
