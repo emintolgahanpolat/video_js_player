@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
     });
     controller.load(WebPlayerSource.videoJs(
       widget.url,
-      autoPlay: false,
+      autoPlay: true,
       poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
       customControlsBuilder: (controller) {
         return CustomWebPlayerController(controller);

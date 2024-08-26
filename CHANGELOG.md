@@ -1,3 +1,7 @@
+## 0.0.7
+
+- Added bufferPercent
+
 ## 0.0.6
 
 - Dispose Bugfix

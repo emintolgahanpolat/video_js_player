@@ -15,7 +15,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   WebViewController get webViewController => _webViewController;
 
   WebVideoPlayerController()
-      : super(WebPlayerValue(1, 1, false, false, false, true)) {
+      : super(WebPlayerValue(0, 0, 0, false, false, false, true)) {
     final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
@@ -33,7 +33,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
       })
       ..addJavaScriptChannel("PlayerInfo", onMessageReceived: (params) {
         print("Player Info Message : ${params.message}");
-        List<String> mData = ["0", "0", "false", "false", "false", "true"];
+        List<String> mData = ["0", "0", "0", "false", "false", "false", "true"];
         try {
           mData = (jsonDecode(params.message) as List)
               .map<String>((item) => item.toString())
@@ -45,10 +45,11 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
         value = WebPlayerValue(
             double.tryParse(mData[0]) ?? 0,
             double.tryParse(mData[1]) ?? 0,
-            bool.tryParse(mData[2]) ?? false,
-            value.isFullScreen,
+            double.tryParse(mData[2]) ?? 0,
             bool.tryParse(mData[3]) ?? false,
-            bool.tryParse(mData[4]) ?? true);
+            value.isFullScreen,
+            bool.tryParse(mData[4]) ?? false,
+            bool.tryParse(mData[5]) ?? true);
       })
       ..setBackgroundColor(Colors.transparent)
       ..enableZoom(false);
@@ -117,7 +118,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
             controls: ${source.customControlsBuilder == null},
          
         });
-          player.on(['durationchange', 'timeupdate', 'paused','play','enterpictureinpicture', 'leavepictureinpicture'], (event) => {  
+          player.on(['progress','durationchange', 'timeupdate', 'paused','play','enterpictureinpicture', 'leavepictureinpicture'], (event) => {  
           var duration = player.duration(); 
           if(duration === Infinity || isNaN(duration)){
            duration = 0
@@ -126,8 +127,12 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
           if(currentTime === Infinity || isNaN(currentTime)){
            currentTime = 0
           }
-         
-          PlayerInfo.postMessage(JSON.stringify([currentTime, duration ,player.paused(),player.isInPictureInPicture(), player.liveTracker.isTracking()]));
+          var bufferedPercent = player.bufferedPercent();
+          if(bufferedPercent === Infinity || isNaN(bufferTime)){
+           bufferedPercent = 0
+          }
+
+          PlayerInfo.postMessage(JSON.stringify([currentTime, duration, bufferedPercent ,player.paused(),player.isInPictureInPicture(), player.liveTracker.isTracking()]));
           
           });
         player.on("error", (event) => {  
@@ -341,6 +346,7 @@ return JSON.stringify(arrayList);
 class WebPlayerValue {
   double currentTime;
   double duration;
+  double bufferedPercent;
   bool isPaused;
   bool isFullScreen;
   bool isInPictureInPicture;
@@ -348,6 +354,7 @@ class WebPlayerValue {
   WebPlayerValue(
     this.currentTime,
     this.duration,
+    this.bufferedPercent,
     this.isPaused,
     this.isFullScreen,
     this.isInPictureInPicture,
@@ -357,6 +364,7 @@ class WebPlayerValue {
   WebPlayerValue copyWith({
     double? currentTime,
     double? duration,
+    double? bufferedPercent,
     bool? isPaused,
     bool? isFullScreen,
     bool? isInPictureInPicture,
@@ -365,6 +373,7 @@ class WebPlayerValue {
     return WebPlayerValue(
       currentTime ?? this.currentTime,
       duration ?? this.duration,
+      bufferedPercent ?? this.bufferedPercent,
       isPaused ?? this.isPaused,
       isFullScreen ?? this.isFullScreen,
       isInPictureInPicture ?? this.isInPictureInPicture,

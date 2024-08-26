@@ -267,14 +267,18 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
                                           seconds: value.currentTime.toInt()),
                                       total: Duration(
                                           seconds: value.duration.toInt()),
+                                      buffered: Duration(
+                                          seconds: (value.bufferedPercent *
+                                                  value.duration)
+                                              .toInt()),
                                       progressBarColor: Colors.red,
                                       baseBarColor:
                                           Colors.white.withOpacity(0.24),
                                       bufferedBarColor:
                                           Colors.white.withOpacity(0.24),
                                       thumbColor: Colors.white,
-                                      barHeight: 3.0,
-                                      thumbRadius: 5.0,
+                                      barHeight: 20.0,
+                                      thumbRadius: 10.0,
                                       onSeek: (v) {
                                         controller
                                             .seekTo(v.inSeconds.toDouble());
