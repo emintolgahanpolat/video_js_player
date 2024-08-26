@@ -1,3 +1,7 @@
+## 0.0.6
+
+- Dispose Bugfix
+
 ## 0.0.5
 
 - Bugfix
