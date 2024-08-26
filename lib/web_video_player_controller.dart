@@ -140,7 +140,10 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   }
 
   void disposeController() {
+    _webViewController.runJavaScript('player.dispose();');
     _webViewController.loadRequest(Uri.parse('about:blank'));
+    _webViewController.clearCache();
+    _webViewController.reload();
   }
 
   Future<void> iframe(WebPlayerSource source) {

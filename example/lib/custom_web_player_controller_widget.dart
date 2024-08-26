@@ -142,15 +142,16 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
                             child: Center(
                               child: Row(
                                 children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      controller.toggleFullScreenMode();
-                                    },
-                                    icon: const Icon(
-                                      Icons.crop_rotate_rounded,
-                                      color: Colors.white,
+                                  if (controller.value.isFullScreen)
+                                    IconButton(
+                                      onPressed: () {
+                                        controller.toggleFullScreenMode();
+                                      },
+                                      icon: const Icon(
+                                        Icons.arrow_back,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
                                   const Spacer(),
                                   IconButton(
                                     onPressed: () {

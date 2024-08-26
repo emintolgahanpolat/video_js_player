@@ -1,8 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:video_js_player/web_video_player.dart';
 
 /// A wrapper for [WebPlayer].
@@ -70,7 +68,7 @@ class _WebPlayerBuilderState extends State<WebPlayerBuilder>
       key: playerKey,
       child: PopScope(
         canPop: !widget.player.controller.value.isFullScreen,
-        onPopInvoked: (didPop) {
+        onPopInvokedWithResult: (didPop, result) {
           if (!didPop) {
             widget.player.controller.toggleFullScreenMode();
           }
@@ -82,7 +80,9 @@ class _WebPlayerBuilderState extends State<WebPlayerBuilder>
 
     return OrientationBuilder(
       builder: (context, orientation) {
-        return orientation == Orientation.portrait ? child : player;
+        return orientation == Orientation.portrait
+            ? child
+            : Material(color: Colors.black, child: Center(child: player));
       },
     );
   }

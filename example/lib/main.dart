@@ -111,32 +111,27 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: WebPlayerBuilder(
+    return Scaffold(
+      appBar: MediaQuery.of(context).orientation == Orientation.landscape &&
+              controller.source?.customControlsBuilder != null
+          ? null
+          : AppBar(
+              title: const Text("Video JS"),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      controller.toggleFullScreenMode();
+                    },
+                    icon: const Icon(
+                      Icons.fullscreen,
+                      color: Colors.red,
+                    ))
+              ],
+            ),
+      body: WebPlayerBuilder(
           player: WebPlayer(controller: controller),
           builder: (c, p) {
-            return Scaffold(
-                appBar: AppBar(
-                  title: const Text("Video JS"),
-                  actions: [
-                    IconButton(
-                        onPressed: () {
-                          controller.toggleFullScreenMode();
-                        },
-                        icon: const Icon(
-                          Icons.fullscreen,
-                          color: Colors.red,
-                        ))
-                  ],
-                ),
-                body: ListView(
-                  children: [
-                    p,
-                    const SizedBox(
-                      height: 24,
-                    ),
-                  ],
-                ));
+            return p;
           }),
     );
   }
