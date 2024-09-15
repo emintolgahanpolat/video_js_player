@@ -349,6 +349,27 @@ return JSON.stringify(arrayList);
   })();
 ''');
   }
+
+  Future<void> addRemoteTextTrack({
+    required String kind,
+    required String src,
+    required String srclang,
+    required String label,
+    String? id,
+  }) {
+    return webViewController.runJavaScript('''
+  (function(){
+  
+   player.addRemoteTextTrack({
+    id:'${id ?? label}',
+    kind: '$kind',
+    src: '$src',
+    srclang: '$srclang',
+    label: '$label',
+    }, false);
+  })();
+''');
+  }
 }
 
 class WebPlayerValue {

@@ -131,7 +131,11 @@ class _HomePageState extends State<HomePage> {
       body: WebPlayerBuilder(
           player: WebPlayer(controller: controller),
           builder: (c, p) {
-            return p;
+            return Column(
+              children: [
+                p,
+              ],
+            );
           }),
     );
   }
