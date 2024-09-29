@@ -44,6 +44,7 @@ class WebPlayerSource {
   final WebPlayerSourceType type;
   final List<WebPlayerVideoSource>? _sources;
   final bool autoPlay;
+  final String? adTagUrl;
   String get source => [...?_sources]
       .map((e) => '<source src="${e.src}" type="${e.type.typeText}" />')
       .join("\n")
@@ -59,6 +60,7 @@ class WebPlayerSource {
     this.poster,
     required this.type,
     this.customControlsBuilder,
+    this.adTagUrl,
     bool? autoPlay,
     List<WebPlayerVideoSource>? sources,
     List<WebPlayerVideoTrack>? tracks,
@@ -81,6 +83,7 @@ class WebPlayerSource {
   static WebPlayerSource videoJs(String url,
       {String? poster,
       bool? autoPlay,
+      String? adTagUrl,
       final Widget Function(WebVideoPlayerController controller)?
           customControlsBuilder}) {
     return WebPlayerSource._(
@@ -88,6 +91,7 @@ class WebPlayerSource {
         poster: poster,
         type: WebPlayerSourceType.videoJs,
         autoPlay: autoPlay,
+        adTagUrl: adTagUrl,
         customControlsBuilder: customControlsBuilder);
   }
 }

@@ -114,18 +114,26 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   </head>
 
   <body>
-    <video id="videoPlayer" class="video-js" poster="${source.poster}" controls playsinline preload="auto"  >
+    <video id="videoPlayer"  class="video-js" poster="${source.poster}" controls playsinline preload="auto"  >
         <source src="${source.url}" type="application/x-mpegURL" />
       
     </video>
+
     <script src="https://vjs.zencdn.net/8.12.0/video.min.js"></script>
+   ${source.adTagUrl == null ? "<!--" : ""} 
+   <script src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/7.5.2/videojs.ads.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/videojs-ima@1.8.0/dist/videojs.ima.js"></script>
+     ${source.adTagUrl == null ? "-->" : ""}
     <script>
         var player = videojs("videoPlayer", {
             errorDisplay: $kDebugMode,
             autoplay:${source.autoPlay},
             controls: ${source.customControlsBuilder == null},
-         
         });
+
+
+
           player.on(['progress','durationchange', 'timeupdate', 'paused','play','enterpictureinpicture', 'leavepictureinpicture'], (event) => {  
           var duration = player.duration(); 
           if(duration === Infinity || isNaN(duration)){
@@ -147,6 +155,18 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
            var error = player.error();
           PlayerError.postMessage(error.message);
         });
+        
+        ${source.adTagUrl == null ? "/*" : ""} 
+            var imaOptions = {
+              adTagUrl: "${source.adTagUrl}",
+            };
+        
+            player.ima(imaOptions);
+            player.addEventListener("play", function () {
+                player.ima.initializeAdDisplayContainer();
+                player.play();
+            });
+        ${source.adTagUrl == null ? "*/" : ""}  
     </script>
   </body>
 """);

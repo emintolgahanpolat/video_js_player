@@ -209,18 +209,16 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  if (!value.isTracking)
-                                    IconButton(
-                                      onPressed: () {
-                                        controller
-                                            .seekTo(value.currentTime - 10);
-                                      },
-                                      icon: const Icon(
-                                        Icons.replay_10,
-                                        color: Colors.white,
-                                        size: 36,
-                                      ),
+                                  IconButton(
+                                    onPressed: () {
+                                      controller.seekTo(value.currentTime - 10);
+                                    },
+                                    icon: const Icon(
+                                      Icons.replay_10,
+                                      color: Colors.white,
+                                      size: 36,
                                     ),
+                                  ),
                                   IconButton(
                                     onPressed: () {
                                       value.isPaused
@@ -238,18 +236,16 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
                                             color: Colors.white,
                                           ),
                                   ),
-                                  if (!value.isTracking)
-                                    IconButton(
-                                      onPressed: () {
-                                        controller
-                                            .seekTo(value.currentTime + 10);
-                                      },
-                                      icon: const Icon(
-                                        Icons.forward_10,
-                                        size: 36,
-                                        color: Colors.white,
-                                      ),
+                                  IconButton(
+                                    onPressed: () {
+                                      controller.seekTo(value.currentTime + 10);
+                                    },
+                                    icon: const Icon(
+                                      Icons.forward_10,
+                                      size: 36,
+                                      color: Colors.white,
                                     ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -277,8 +273,8 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
                                     bufferedBarColor:
                                         Colors.white.withOpacity(0.24),
                                     thumbColor: Colors.white,
-                                    barHeight: 20.0,
-                                    thumbRadius: 10.0,
+                                    barHeight: 2.0,
+                                    thumbRadius: 6.0,
                                     onSeek: (v) {
                                       controller.seekTo(v.inSeconds.toDouble());
                                     },
