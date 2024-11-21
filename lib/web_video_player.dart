@@ -33,16 +33,13 @@ class _WebPlayerState extends State<WebPlayer> {
           }
         }
       },
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Stack(
-          children: [
-            WebViewWidget(controller: _videoPlayerController.webViewController),
-            if (_videoPlayerController.source?.customControlsBuilder != null)
-              _videoPlayerController.source!.customControlsBuilder!
-                  .call(_videoPlayerController),
-          ],
-        ),
+      child: Stack(
+        children: [
+          WebViewWidget(controller: _videoPlayerController.webViewController),
+          if (_videoPlayerController.source?.customControlsBuilder != null)
+            _videoPlayerController.source!.customControlsBuilder!
+                .call(_videoPlayerController),
+        ],
       ),
     );
   }

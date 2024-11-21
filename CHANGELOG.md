@@ -1,3 +1,7 @@
+## 0.0.9
+
+- Custom Controller Widget AspectRatio removed
+
 ## 0.0.8
 
 - Added bufferPercent
