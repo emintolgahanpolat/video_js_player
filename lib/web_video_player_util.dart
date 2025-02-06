@@ -66,14 +66,6 @@ String videoJsHtml(WebPlayerSource source) {
           PlayerError.postMessage(error.message);
         });
 
-        function pause() {
-                        player.pause();
-                          window.flutter_inappwebview.callHandler('TestInfo',"deneme");
-          
-                        return '';
-                    }
-
-       
     </script>
   </body>
 """;

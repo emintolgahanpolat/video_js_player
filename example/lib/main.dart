@@ -35,7 +35,7 @@ class _WelcomePageState extends State<WelcomePage> {
   final TextEditingController _editingController = TextEditingController(
       text:
           "https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8");
-
+  var isIframe = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,12 +46,27 @@ class _WelcomePageState extends State<WelcomePage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 8,
           children: [
             TextFormField(
               controller: _editingController,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    _editingController.clear();
+                  },
+                  icon: const Icon(Icons.clear),
+                ),
+              ),
             ),
-            const SizedBox(
-              height: 8,
+            CheckboxListTile(
+              value: isIframe,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+              onChanged: (v) {
+                isIframe = !isIframe;
+                setState(() {});
+              },
+              title: const Text("iFrame"),
             ),
             ElevatedButton(
                 onPressed: () {
@@ -60,6 +75,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       MaterialPageRoute(
                           builder: (_) => HomePage(
                                 url: _editingController.text,
+                                isIframe: isIframe,
                               )));
                 },
                 child: const Text("Open Player"))
@@ -72,7 +88,8 @@ class _WelcomePageState extends State<WelcomePage> {
 
 class HomePage extends StatefulWidget {
   final String url;
-  const HomePage({super.key, required this.url});
+  final bool isIframe;
+  const HomePage({super.key, required this.url, required this.isIframe});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -82,51 +99,68 @@ class _HomePageState extends State<HomePage> {
   var controller = WebVideoPlayerController();
   @override
   void initState() {
-    // controller.setErrorListener((error) {
-    //   print(error);
-    //   showAdaptiveDialog(
-    //       context: context,
-    //       builder: (c) => AlertDialog(
-    //             title: const Text("Error"),
-    //             content: Text(error),
-    //             actions: [
-    //               TextButton(
-    //                 onPressed: () => Navigator.pop(context),
-    //                 child: const Text('Ok'),
-    //               ),
-    //             ],
-    //           ));
-    // });
-    controller.load(WebPlayerSource.videoJs(
-      widget.url,
-      autoPlay: true,
-      poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
-      customControlsBuilder: (controller) {
-        return CustomWebPlayerController(controller);
-      },
-    ));
+    controller.setErrorListener((error) {
+      print(error);
+      showAdaptiveDialog(
+          context: context,
+          builder: (c) => AlertDialog(
+                title: const Text("Error"),
+                content: Text(error),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Ok'),
+                  ),
+                ],
+              ));
+    });
+    controller.load(widget.isIframe
+        ? WebPlayerSource.withUrl(
+            widget.url,
+            autoPlay: true,
+            poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
+          )
+        : WebPlayerSource.videoJs(
+            widget.url,
+            autoPlay: true,
+            poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
+            customControlsBuilder: (controller) {
+              return CustomWebPlayerController(controller);
+            },
+          ));
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text("Video JS"),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.fullscreen,
-                color: Colors.red,
-              ))
-        ],
-      ),
-      body: WebPlayer(
-        controller: controller,
-      ),
-    );
+    return WebPlayerBuilder(
+        player: WebPlayer(
+          controller: controller,
+        ),
+        builder: (c, player) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("Video JS"),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      controller.toggleFullScreenMode();
+                    },
+                    icon: const Icon(
+                      Icons.fullscreen,
+                      color: Colors.red,
+                    ))
+              ],
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  AspectRatio(aspectRatio: 16 / 9, child: player),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

@@ -18,6 +18,10 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
         ?.controller;
   }
 
+  void setError(String error) {
+    _errorListerner?.call(error);
+  }
+
   WebPlayerErrorListerner? _errorListerner;
   void setErrorListener(WebPlayerErrorListerner listener) {
     _errorListerner = listener;
@@ -39,13 +43,6 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
     return webViewController?.loadData(data: videoJsHtml(source));
   }
 
-  @override
-  void dispose() {
-    value.webViewController?.goBack();
-    value.webViewController?.dispose();
-    super.dispose();
-  }
-
   Future<void> iframe(WebPlayerSource source) async {
     _source = source;
 
@@ -53,6 +50,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   }
 
   void updateValue(WebPlayerValue newValue) => value = newValue;
+
   void toggleFullScreenMode() {
     value.isFullScreen = !value.isFullScreen;
     if (value.isFullScreen) {
@@ -76,12 +74,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   }
 
   Future<void>? pause() {
-    if (value.webViewController != null) {
-      return webViewController?.evaluateJavascript(source: 'pause()');
-    } else {
-      print("Error : WebViewController is null");
-    }
-    return webViewController?.evaluateJavascript(source: 'pause()');
+    return webViewController?.evaluateJavascript(source: 'player.pause();');
   }
 
   Future<void> requestFullscreen() async {
@@ -112,124 +105,121 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
     return false;
   }
 
-  Future<List<dynamic>> textTracks() {
-//     return webViewController?.evaluateJavascript(source: '''
-//  (function() {
-//         var textTracks = player.textTracks();
-//         var arrayList = [];
+  Future<List<dynamic>> textTracks() async {
+    return webViewController?.evaluateJavascript(source: '''
+ (function() {
+        var textTracks = player.textTracks();
+        var arrayList = [];
 
-//         Array.from(textTracks).forEach(function(track) {
-//             if (track.kind === 'subtitles' || track.kind === 'captions') {
-//               var trackObj = {
-//                             default: track.default || false,
-//                             id: track.id || '',
-//                             kind: track.kind,
-//                             label: track.label,
-//                             language: track.language,
-//                             mode: track.mode
-//                         };
-//                    arrayList.push(trackObj);
-//             }
-//         });
+        Array.from(textTracks).forEach(function(track) {
+            if (track.kind === 'subtitles' || track.kind === 'captions') {
+              var trackObj = {
+                            default: track.default || false,
+                            id: track.id || '',
+                            kind: track.kind,
+                            label: track.label,
+                            language: track.language,
+                            mode: track.mode
+                        };
+                   arrayList.push(trackObj);
+            }
+        });
 
-// return JSON.stringify(arrayList);
+return JSON.stringify(arrayList);
 
-//     })();
+    })();
 
-// ''').then((v) {
-//       return jsonDecode(v.toString());
-//     });
-    return Future.value([]);
+''').then((v) {
+          return jsonDecode(v.toString());
+        }) ??
+        [];
   }
 
-  Future<List<dynamic>> audioTracks() {
-//     return webViewController?.evaluateJavascript(source: '''
-//  (function() {
-//         var audioTracks = player.audioTracks();
-//          var arrayList = [];
-//         Array.from(audioTracks).forEach(function(track) {
-//          var trackObj = {
-//                             default: track.default || false,
-//                             enabled: track.enabled || false,
-//                             id: track.id || '',
-//                             kind: track.kind,
-//                             label: track.label,
-//                             language: track.language,
-//                             mode: track.mode
-//                         };
-//              arrayList.push(trackObj);
-//         });
+  Future<List<dynamic>> audioTracks() async {
+    return webViewController?.evaluateJavascript(source: '''
+ (function() {
+        var audioTracks = player.audioTracks();
+         var arrayList = [];
+        Array.from(audioTracks).forEach(function(track) {
+         var trackObj = {
+                            default: track.default || false,
+                            enabled: track.enabled || false,
+                            id: track.id || '',
+                            kind: track.kind,
+                            label: track.label,
+                            language: track.language,
+                            mode: track.mode
+                        };
+             arrayList.push(trackObj);
+        });
 
-// return JSON.stringify(arrayList);
+return JSON.stringify(arrayList);
 
-//     })();
+    })();
 
-// ''').then((v) {
-//       return jsonDecode(v.toString());
-//     });
-    return Future.value([]);
+''').then((v) {
+          return jsonDecode(v.toString());
+        }) ??
+        [];
   }
 
-  Future<void> changeTextTrack(String id) {
-//     return webViewController?.evaluateJavascript(source: '''
-//   (function(){
+  Future<void>? changeTextTrack(String id) {
+    return webViewController?.evaluateJavascript(source: '''
+  (function(){
 
-//    var tracks = player.textTracks();
+   var tracks = player.textTracks();
 
-//     for (var i = 0; i < tracks.length; i++) {
-//       // Track dilini kontrol et ve görünürlüğünü ayarla
-//       if (tracks[i].id === "$id") {
-//         tracks[i].mode = 'showing'; // Bu track'i göster
-//       } else {
-//         tracks[i].mode = 'disabled'; // Diğer track'leri gizle
-//       }
-//     }
+    for (var i = 0; i < tracks.length; i++) {
+      // Track dilini kontrol et ve görünürlüğünü ayarla
+      if (tracks[i].id === "$id") {
+        tracks[i].mode = 'showing'; // Bu track'i göster
+      } else {
+        tracks[i].mode = 'disabled'; // Diğer track'leri gizle
+      }
+    }
 
-//   })();
-// ''');
-    return Future.value();
+  })();
+''');
   }
 
-  Future<void> changeAudioTracks(String id) {
-//     return webViewController?.evaluateJavascript(source: '''
-//   (function(){
+  Future<void>? changeAudioTracks(String id) {
+    return webViewController?.evaluateJavascript(source: '''
+  (function(){
 
-//    var tracks = player.audioTracks();
+   var tracks = player.audioTracks();
 
-//     for (var i = 0; i < tracks.length; i++) {
-//       // Track dilini kontrol et ve görünürlüğünü ayarla
-//       if (tracks[i].id === "$id") {
-//         tracks[i].enabled = true; // Bu track'i göster
-//       } else {
-//         tracks[i].enabled = false; // Diğer track'leri gizle
-//       }
-//     }
+    for (var i = 0; i < tracks.length; i++) {
+      // Track dilini kontrol et ve görünürlüğünü ayarla
+      if (tracks[i].id === "$id") {
+        tracks[i].enabled = true; // Bu track'i göster
+      } else {
+        tracks[i].enabled = false; // Diğer track'leri gizle
+      }
+    }
 
-//   })();
-// ''');
-    return Future.value();
+  })();
+''');
   }
 
-  Future<void> addRemoteTextTrack({
+  Future<void>? addRemoteTextTrack({
     required String kind,
     required String src,
     required String srclang,
     required String label,
     String? id,
   }) {
-//     return webViewController?.evaluateJavascript(source: '''
-//   (function(){
-
-//    player.addRemoteTextTrack({
-//     id:'${id ?? label}',
-//     kind: '$kind',
-//     src: '$src',
-//     srclang: '$srclang',
-//     label: '$label',
-//     }, false);
-//   })();
-// ''');
-    return Future.value();
+    return webViewController?.evaluateJavascript(source: '''
+  (function(){
+// 
+   player.addRemoteTextTrack({
+    id:'${id ?? label}',
+    kind: '$kind',
+    src: '$src',
+    srclang: '$srclang',
+    label: '$label',
+    }, false);
+  })();
+''');
   }
 }
 
