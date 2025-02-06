@@ -100,7 +100,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     controller.setErrorListener((error) {
-      print(error);
       showAdaptiveDialog(
           context: context,
           builder: (c) => AlertDialog(

@@ -160,9 +160,10 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
                                         controller.audioTracks()
                                       ]).then((futureValue) {
                                         showGeneralDialog(
+                                          // ignore: use_build_context_synchronously
                                           context: context,
-                                          barrierColor:
-                                              Colors.black12.withOpacity(0.9),
+                                          barrierColor: Colors.black12
+                                              .withValues(alpha: 0.9),
                                           pageBuilder: (c, _, __) =>
                                               _buildDubbingSubtitleDialog(
                                                   c,
@@ -269,9 +270,10 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
                                         (value.bufferedPercent * value.duration)
                                             .toInt()),
                                 progressBarColor: Colors.red,
-                                baseBarColor: Colors.white.withOpacity(0.24),
+                                baseBarColor:
+                                    Colors.white.withValues(alpha: 0.24),
                                 bufferedBarColor:
-                                    Colors.white.withOpacity(0.24),
+                                    Colors.white.withValues(alpha: 0.24),
                                 thumbColor: Colors.white,
                                 barHeight: 4.0,
                                 thumbRadius: 10.0,

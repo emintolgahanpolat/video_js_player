@@ -1,3 +1,7 @@
+## 0.0.10
+
+- webview_flutter changed inappwebview 
+
 ## 0.0.9
 
 - Custom Controller Widget AspectRatio removed
