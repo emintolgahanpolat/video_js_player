@@ -82,21 +82,21 @@ class _HomePageState extends State<HomePage> {
   var controller = WebVideoPlayerController();
   @override
   void initState() {
-    controller.setErrorListener((error) {
-      print(error);
-      showAdaptiveDialog(
-          context: context,
-          builder: (c) => AlertDialog(
-                title: const Text("Error"),
-                content: Text(error),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Ok'),
-                  ),
-                ],
-              ));
-    });
+    // controller.setErrorListener((error) {
+    //   print(error);
+    //   showAdaptiveDialog(
+    //       context: context,
+    //       builder: (c) => AlertDialog(
+    //             title: const Text("Error"),
+    //             content: Text(error),
+    //             actions: [
+    //               TextButton(
+    //                 onPressed: () => Navigator.pop(context),
+    //                 child: const Text('Ok'),
+    //               ),
+    //             ],
+    //           ));
+    // });
     controller.load(WebPlayerSource.videoJs(
       widget.url,
       autoPlay: true,
@@ -112,31 +112,21 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MediaQuery.of(context).orientation == Orientation.landscape &&
-              controller.source?.customControlsBuilder != null
-          ? null
-          : AppBar(
-              title: const Text("Video JS"),
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      controller.toggleFullScreenMode();
-                    },
-                    icon: const Icon(
-                      Icons.fullscreen,
-                      color: Colors.red,
-                    ))
-              ],
-            ),
-      body: WebPlayerBuilder(
-          player: WebPlayer(controller: controller),
-          builder: (c, p) {
-            return Column(
-              children: [
-                p,
-              ],
-            );
-          }),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text("Video JS"),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.fullscreen,
+                color: Colors.red,
+              ))
+        ],
+      ),
+      body: WebPlayer(
+        controller: controller,
+      ),
     );
   }
 }

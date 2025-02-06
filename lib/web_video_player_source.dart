@@ -44,6 +44,7 @@ class WebPlayerSource {
   final WebPlayerSourceType type;
   final List<WebPlayerVideoSource>? _sources;
   final bool autoPlay;
+
   String get source => [...?_sources]
       .map((e) => '<source src="${e.src}" type="${e.type.typeText}" />')
       .join("\n")
@@ -54,6 +55,7 @@ class WebPlayerSource {
           '<track kind="${e.kind}" src="${e.src}" srclang="${e.srcLang}" label="${e.label}" />" />')
       .join("\n")
       .toString();
+
   WebPlayerSource._({
     this.url,
     this.poster,
