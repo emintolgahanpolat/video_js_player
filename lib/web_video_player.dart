@@ -74,23 +74,70 @@ class _WebPlayerState extends State<WebPlayer> {
               );
 
               controller.addJavaScriptHandler(
-                  handlerName: "PlayerError",
-                  callback: (params) {
-                    _videoPlayerController.setError(params[0]);
-                  });
-              controller.addJavaScriptHandler(
-                handlerName: "PlayerInfo",
+                handlerName: "error",
                 callback: (params) {
-                  _videoPlayerController.updateValue(
-                      _videoPlayerController.value.copyWith(
-                          currentTime: double.parse("${params[0]}"),
-                          duration: double.parse("${params[1]}"),
-                          bufferedPercent: double.parse("${params[2]}"),
-                          isPaused: params[3],
-                          isInPictureInPicture: params[4],
-                          isTracking: params[5]));
+                  _videoPlayerController.setError(params[0]);
                 },
               );
+              controller.addJavaScriptHandler(
+                  handlerName: "pause",
+                  callback: (params) {
+                    _videoPlayerController.updateValue(_videoPlayerController
+                        .value
+                        .copyWith(isPaused: params[0]));
+                  });
+              controller.addJavaScriptHandler(
+                  handlerName: "currentTime",
+                  callback: (params) {
+                    _videoPlayerController
+                        .updateValue(_videoPlayerController.value.copyWith(
+                      currentTime: double.parse("${params[0]}"),
+                    ));
+                  });
+
+              controller.addJavaScriptHandler(
+                  handlerName: "bufferedPercent",
+                  callback: (params) {
+                    _videoPlayerController
+                        .updateValue(_videoPlayerController.value.copyWith(
+                      bufferedPercent: double.parse("${params[0]}"),
+                    ));
+                  });
+
+              controller.addJavaScriptHandler(
+                  handlerName: "durationchange",
+                  callback: (params) {
+                    _videoPlayerController
+                        .updateValue(_videoPlayerController.value.copyWith(
+                      duration: double.parse("${params[0]}"),
+                    ));
+                  });
+
+              controller.addJavaScriptHandler(
+                  handlerName: "isTracking",
+                  callback: (params) {
+                    _videoPlayerController
+                        .updateValue(_videoPlayerController.value.copyWith(
+                      isTracking: params[0],
+                    ));
+                  });
+              controller.addJavaScriptHandler(
+                  handlerName: "enterpictureinpicture",
+                  callback: (params) {
+                    _videoPlayerController
+                        .updateValue(_videoPlayerController.value.copyWith(
+                      isFullScreen: params[0],
+                    ));
+                  });
+
+              controller.addJavaScriptHandler(
+                  handlerName: "durationchange",
+                  callback: (params) {
+                    _videoPlayerController
+                        .updateValue(_videoPlayerController.value.copyWith(
+                      duration: double.parse("${params[0]}"),
+                    ));
+                  });
             },
           ),
           if (_videoPlayerController.source?.customControlsBuilder != null)

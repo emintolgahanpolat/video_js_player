@@ -117,12 +117,12 @@ class _HomePageState extends State<HomePage> {
         ? WebPlayerSource.withUrl(
             widget.url,
             autoPlay: true,
-            poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
+            //  poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
           )
         : WebPlayerSource.videoJs(
             widget.url,
             autoPlay: true,
-            poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
+            //  poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
             customControlsBuilder: (controller) {
               return CustomWebPlayerController(controller);
             },
