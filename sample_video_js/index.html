@@ -80,8 +80,82 @@
         player.on("ready", (event) => {
             _callHandler("ready", true);
 
-            _callHandler("audioTracks", player.audioTracks());
-            _callHandler("textTracks", player.textTracks());
+        });
+        player.on('loadedmetadata', function () {
+            var audioTracks = player.audioTracks();
+            var audioTracksList = [];
+            for (var i = 0; i < audioTracks.length; i++) {
+                var track = audioTracks[i];
+                var trackObj = {
+                    default: track.default || false,
+                    enabled: track.enabled || false,
+                    id: track.id || '',
+                    kind: track.kind,
+                    label: track.label,
+                    language: track.language,
+                    mode: track.mode
+                };
+                audioTracksList.push(trackObj);
+            }
+            _callHandler("audioTracks", audioTracksList);
+
+            var textTracks = player.textTracks();
+            var textTracksList = [];
+
+            Array.from(textTracks).forEach(function (track) {
+                if (track.kind === 'subtitles' || track.kind === 'captions') {
+                    var trackObj = {
+                        default: track.default || false,
+                        id: track.id || '',
+                        kind: track.kind,
+                        label: track.label,
+                        language: track.language,
+                        mode: track.mode
+                    };
+                    textTracksList.push(trackObj);
+                }
+            });
+
+            _callHandler("textTracks", textTracksList);
+        });
+        player.audioTracks().on("change", (event) => {
+            var audioTracks = player.audioTracks();
+            var audioTracksList = [];
+            for (var i = 0; i < audioTracks.length; i++) {
+                var track = audioTracks[i];
+                var trackObj = {
+                    default: track.default || false,
+                    enabled: track.enabled || false,
+                    id: track.id || '',
+                    kind: track.kind,
+                    label: track.label,
+                    language: track.language,
+                    mode: track.mode
+                };
+                audioTracksList.push(trackObj);
+            }
+            _callHandler("audioTracks", audioTracksList);
+        });
+        player.textTracks().on("change", (event) => {
+
+            var textTracks = player.textTracks();
+            var textTracksList = [];
+
+            Array.from(textTracks).forEach(function (track) {
+                if (track.kind === 'subtitles' || track.kind === 'captions') {
+                    var trackObj = {
+                        default: track.default || false,
+                        id: track.id || '',
+                        kind: track.kind,
+                        label: track.label,
+                        language: track.language,
+                        mode: track.mode
+                    };
+                    textTracksList.push(trackObj);
+                }
+            });
+
+            _callHandler("textTracks", textTracksList);
         });
         player.on("fullscreenchange", (event) => {
             _callHandler("fullscreenchange", player.isFullscreen());

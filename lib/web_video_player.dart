@@ -138,6 +138,9 @@ class _WebPlayerState extends State<WebPlayer> {
                       duration: double.parse("${params[0]}"),
                     ));
                   });
+
+              controller.addJavaScriptHandler(
+                  handlerName: "audioTracks", callback: (params) {});
             },
           ),
           if (_videoPlayerController.source?.customControlsBuilder != null)
