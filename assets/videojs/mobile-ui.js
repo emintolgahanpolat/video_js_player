@@ -4,7 +4,7 @@ function addMobileUI(player) {
 
 
     const mobileControlDiv = document.createElement('div');
-    mobileControlDiv.classList.add('mobile-vjs-controls');
+    mobileControlDiv.classList.add('mobile-vjs-control');
 
     // Rewind button
     const rewindBtn = document.createElement('button');
@@ -48,7 +48,7 @@ function addMobileUI(player) {
 
     // Top Controls Container
     const topControlDiv = document.createElement('div');
-    topControlDiv.classList.add('mobile-vjs-controls-top');
+    topControlDiv.classList.add('mobile-vjs-control-top');
 
     if (player.controlBar.subsCapsButton) {
         topControlDiv.appendChild(player.controlBar.subsCapsButton.el());

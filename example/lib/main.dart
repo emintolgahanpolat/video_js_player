@@ -97,7 +97,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var controller = WebVideoPlayerController();
-  var controller2 = WebVideoPlayerController();
   @override
   void initState() {
     controller.setErrorListener((error) {
@@ -117,28 +116,19 @@ class _HomePageState extends State<HomePage> {
     controller.load(widget.isIframe
         ? WebPlayerSource.withUrl(
             widget.url,
-            autoPlay: true,
-            //  poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
-          )
-        : WebPlayerSource.videoJs(
-            widget.url,
-            autoPlay: true,
-            //  poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
-            customControlsBuilder: (controller) {
-              return CustomWebPlayerController(controller);
-            },
-          ));
-
-    controller2.load(widget.isIframe
-        ? WebPlayerSource.withUrl(
-            widget.url,
             autoPlay: false,
             //  poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
           )
         : WebPlayerSource.videoJs(
-            widget.url,
-            autoPlay: false,
+            source: WebPlayerVideoSource(
+              widget.url,
+              WebPlayerVideoSourceType.mpegURL,
+            ),
+            autoPlay: true,
             //  poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
+            // customControlsBuilder: (controller) {
+            //   return CustomWebPlayerController(controller);
+            // },
           ));
 
     super.initState();
@@ -169,9 +159,6 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   AspectRatio(aspectRatio: 16 / 9, child: player),
-                  AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: WebPlayer(controller: controller2)),
                 ],
               ),
             ),

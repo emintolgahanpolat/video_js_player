@@ -11,8 +11,10 @@ String videoJsHtml(WebPlayerSource source) {
     <link href="https://vjs.zencdn.net/8.12.0/video-js.css" rel="stylesheet" />
     <title>Video Oynatıcı</title>
 
-      <link rel="stylesheet" href="assets/videojs/mobile-ui.min.css">
-    <script src="assets/videojs/mobile-ui.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" href="packages/video_js_player/assets/mobile-ui.css">
+    <script src="packages/video_js_player/assets/mobile-ui.js"></script>
     <style>
         body,
         html {
@@ -53,35 +55,30 @@ String videoJsHtml(WebPlayerSource source) {
                   pictureInPictureToggle: true,
               },
         });
-       addMobileUI(player);
-    </script>
-        <script>
-        // handler
+        addMobileUI(player);
+
         player.on("progress", (event) => {
 
             var bufferedPercent = player.bufferedPercent();
             if (bufferedPercent === Infinity || isNaN(bufferedPercent)) {
                 bufferedPercent = 0;
             }
-            // _callHandler("bufferedPercent", bufferedPercent);
+            _callHandler("bufferedPercent", bufferedPercent);
         });
-
         player.on("timeupdate", (event) => {
             var currentTime = player.currentTime()
             if (currentTime === Infinity || isNaN(currentTime)) {
                 currentTime = 0
             }
 
-            // _callHandler("currentTime", currentTime);
+            _callHandler("currentTime", currentTime);
         });
         player.on("volumechange", (event) => {
             _callHandler("volumechange", player.muted() ? 0 : player.volume());
         });
-
         player.on("muted", (event) => {
             _callHandler("muted", player.muted());
         });
-
         player.on("ratechange", (event) => {
             _callHandler("ratechange", player.playbackRate());
         });
@@ -91,7 +88,6 @@ String videoJsHtml(WebPlayerSource source) {
         player.on("seeked", (event) => {
             _callHandler("seeked", true);
         });
-
         player.on("ready", (event) => {
             _callHandler("ready", true);
 
@@ -183,19 +179,15 @@ String videoJsHtml(WebPlayerSource source) {
             _callHandler("durationchange", duration);
             _callHandler("isTracking", player.liveTracker.isTracking());
         });
-
         player.on(["play", "pause"], (event) => {
             _callHandler("pause", player.paused());
         });
-
         player.on(["enterpictureinpicture", "leavepictureinpicture"], (event) => {
             _callHandler("enterpictureinpicture", player.isInPictureInPicture());
         });
-
         player.on("ended", (event) => {
             _callHandler("ended", player.ended());
         });
-
         player.on("error", (event) => {
             var error = player.error();
             _callHandler("error", {
@@ -203,10 +195,9 @@ String videoJsHtml(WebPlayerSource source) {
                 message: error.message
             });
         });
-
         function _callHandler(method, args) {
-            console.log(method, args);
-            // window.flutter_inappwebview.callHandler(method, args);
+            // console.log(method, args);
+            window.flutter_inappwebview.callHandler(method, args);
         }
 
     </script>

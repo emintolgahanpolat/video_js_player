@@ -23,6 +23,10 @@ $primary-foreground-color: #fff;
 $primary-background-color: #000;
 $center-big-play-button: false;
 
+.video-js .vjs-control-bar {
+    margin-bottom: 2em;
+}
+
 .video-js .vjs-control-bar,
 .video-js .vjs-menu-button .vjs-menu-content {
     background-color: $primary-background-color;
@@ -89,7 +93,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 
 // Mobile Control Start
-.mobile-vjs-controls {
+.mobile-vjs-control {
     display: none;
     position: absolute;
     top: 50%;
@@ -99,7 +103,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 }
 
-.mobile-vjs-controls .vjs-control {
+.mobile-vjs-control .vjs-control {
     height: auto;
     font-size: 2em;
 }
@@ -107,7 +111,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 // Mobile Control End
 // Mobile Top Menu Start
-.mobile-vjs-controls-top {
+.mobile-vjs-control-top {
     display: none;
     position: absolute;
     top: 0;
@@ -117,7 +121,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     transition: visibility .1s, opacity .1s;
 }
 
-.mobile-vjs-controls-top .vjs-menu-button-popup .vjs-menu {
+.mobile-vjs-control-top .vjs-menu-button-popup .vjs-menu {
     display: none;
     position: absolute;
     top: 0em;
@@ -139,16 +143,24 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 
 // Mobile Control Visiblity 
-.vjs-has-started .mobile-vjs-controls,
-.vjs-audio-only-mode .mobile-vjs-controls,
-.vjs-has-started .mobile-vjs-controls-top,
-.vjs-audio-only-mode .mobile-vjs-controls-top {
+.vjs-has-started .mobile-vjs-control,
+.vjs-audio-only-mode .mobile-vjs-control,
+.vjs-has-started .mobile-vjs-control-top,
+.vjs-audio-only-mode .mobile-vjs-control-top {
     display: flex;
     visibility: visible;
     opacity: 1;
     transition: visibility 0.1s, opacity 0.1s;
 }
 
+.vjs-controls-disabled .mobile-vjs-control,
+.vjs-using-native-controls .mobile-vjs-control,
+.vjs-error .mobile-vjs-control,
+.vjs-controls-disabled .mobile-vjs-control-top,
+.vjs-using-native-controls .mobile-vjs-control-top,
+.vjs-error .mobile-vjs-control-top {
+    display: none !important;
+}
 
 // Icons Start 
 .vjs-icon-replay-10:before,

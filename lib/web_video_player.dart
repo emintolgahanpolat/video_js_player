@@ -47,12 +47,11 @@ class _WebPlayerState extends State<WebPlayer> {
         children: [
           InAppWebView(
             initialFile: "packages/video_js_player/assets/videojs/index.html",
-
             // initialData: InAppWebViewInitialData(
-            //   data: _videoPlayerController.source!.type ==
+            //   data: _videoPlayerController.source.type ==
             //           WebPlayerSourceType.videoJs
-            //       ? videoJsHtml(_videoPlayerController.source!)
-            //       : iframeHtml(_videoPlayerController.source!),
+            //       ? videoJsHtml(_videoPlayerController.source)
+            //       : iframeHtml(_videoPlayerController.source),
             //   encoding: 'utf-8',
             //   mimeType: 'text/html',
             // ),
@@ -68,6 +67,19 @@ class _WebPlayerState extends State<WebPlayer> {
               allowsPictureInPictureMediaPlayback: true,
               useWideViewPort: false,
             ),
+            onLoadStop: (controller, url) {
+              _videoPlayerController.evaluateJavascript(
+                  source:
+                      "player.controls(${_videoPlayerController.source?.customControlsBuilder == null});");
+              if (_videoPlayerController.source?.sources != null) {
+                _videoPlayerController
+                    .src(_videoPlayerController.source!.sources!);
+
+                if (_videoPlayerController.source!.autoPlay) {
+                  _videoPlayerController.play();
+                }
+              }
+            },
             onWebViewCreated: (controller) {
               _videoPlayerController.updateValue(
                 _videoPlayerController.value.copyWith(

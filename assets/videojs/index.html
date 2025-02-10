@@ -6,9 +6,9 @@
     <link href="https://vjs.zencdn.net/8.12.0/video-js.css" rel="stylesheet" />
     <title>Video Oynatıcı</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" href="mobile-ui.css">
     <script src="mobile-ui.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 </head>
 
 <body>
@@ -22,8 +22,8 @@
     <script>
         var player = videojs("videoPlayer", {
             errorDisplay: true,
-            autoplay: true,
-            controls: true,
+            autoplay: false,
+            controls: false,
             controlBar: {
                 playToggle: true,
                 volumePanel: false,
@@ -176,8 +176,11 @@
             });
         });
         function _callHandler(method, args) {
-            console.log(method, args);
-            window.flutter_inappwebview.callHandler(method, args);
+            // console.log(method, args);
+            if (window.flutter_inappwebview) {
+                window.flutter_inappwebview.callHandler(method, args);
+            }
+
         }
 
     </script>

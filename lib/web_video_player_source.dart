@@ -7,11 +7,12 @@ class WebPlayerVideoSource {
   WebPlayerVideoSource(this.src, this.type);
 }
 
-enum WebPlayerVideoSourceType { mp4, ogg, webm }
+enum WebPlayerVideoSourceType { mpegURL, mp4, ogg, webm }
 
 extension WebPlayerVideoSourceTypeEx on WebPlayerVideoSourceType {
   String get typeText {
     return switch (this) {
+      WebPlayerVideoSourceType.mpegURL => "application/x-mpegURL",
       WebPlayerVideoSourceType.mp4 => "video/mp4",
       WebPlayerVideoSourceType.ogg => "video/ogg",
       WebPlayerVideoSourceType.webm => "video/webm",
@@ -42,31 +43,29 @@ class WebPlayerSource {
   final String? url;
   final String? poster;
   final WebPlayerSourceType type;
-  final List<WebPlayerVideoSource>? _sources;
+  final List<WebPlayerVideoSource>? sources;
   final bool autoPlay;
 
-  String get source => [...?_sources]
-      .map((e) => '<source src="${e.src}" type="${e.type.typeText}" />')
-      .join("\n")
-      .toString();
-  final List<WebPlayerVideoTrack>? _tracks;
-  String get track => [...?_tracks]
-      .map((e) =>
-          '<track kind="${e.kind}" src="${e.src}" srclang="${e.srcLang}" label="${e.label}" />" />')
-      .join("\n")
-      .toString();
+  // String get source => [...?_sources]
+  //     .map((e) => '<source src="${e.src}" type="${e.type.typeText}" />')
+  //     .join("\n")
+  //     .toString();
+  // final List<WebPlayerVideoTrack>? _tracks;
+  // String get track => [...?_tracks]
+  //     .map((e) =>
+  //         '<track kind="${e.kind}" src="${e.src}" srclang="${e.srcLang}" label="${e.label}" />" />')
+  //     .join("\n")
+  //     .toString();
 
   WebPlayerSource._({
     this.url,
     this.poster,
     required this.type,
     this.customControlsBuilder,
+    this.sources,
     bool? autoPlay,
-    List<WebPlayerVideoSource>? sources,
-    List<WebPlayerVideoTrack>? tracks,
-  })  : _sources = sources,
-        _tracks = tracks,
-        autoPlay = autoPlay ?? false;
+  }) : autoPlay = autoPlay ?? false;
+
   static WebPlayerSource withUrl(
     String url, {
     String? poster,
@@ -80,16 +79,22 @@ class WebPlayerSource {
         customControlsBuilder: null);
   }
 
-  static WebPlayerSource videoJs(String url,
-      {String? poster,
+  static WebPlayerSource videoJs(
+      {WebPlayerVideoSource? source,
+      String? poster,
       bool? autoPlay,
+      List<WebPlayerVideoSource>? sources,
       final Widget Function(WebVideoPlayerController controller)?
           customControlsBuilder}) {
+    var sources0 = sources ?? [];
+    if (source != null) {
+      sources0.add(source);
+    }
     return WebPlayerSource._(
-        url: url,
         poster: poster,
         type: WebPlayerSourceType.videoJs,
         autoPlay: autoPlay,
+        sources: sources0,
         customControlsBuilder: customControlsBuilder);
   }
 }

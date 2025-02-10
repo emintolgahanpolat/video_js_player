@@ -63,38 +63,48 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
     }
   }
 
+  Future<dynamic> evaluateJavascript(
+      {required String source, ContentWorld? contentWorld}) async {
+    if (webViewController == null) {
+      throw "webViewController is null";
+    }
+    return webViewController?.evaluateJavascript(
+        source: source, contentWorld: contentWorld);
+  }
+
+  Future<dynamic>? src(List<WebPlayerVideoSource> source) {
+    return evaluateJavascript(
+        source:
+            'player.src({ type: "${source.first.type.typeText}", src: "${source.first.src}" });');
+  }
+
   Future<dynamic>? seekTo(double timeInSecond) {
     value = value.copyWith(currentTime: timeInSecond);
-    return webViewController?.evaluateJavascript(
-        source: 'player.currentTime($timeInSecond);');
+    return evaluateJavascript(source: 'player.currentTime($timeInSecond);');
   }
 
   Future<dynamic>? play() {
-    return webViewController?.evaluateJavascript(source: 'player.play();');
+    return evaluateJavascript(source: 'player.play();');
   }
 
   Future<void>? pause() {
-    return webViewController?.evaluateJavascript(source: 'player.pause();');
+    return evaluateJavascript(source: 'player.pause();');
   }
 
   Future<void> requestFullscreen() async {
-    return webViewController?.evaluateJavascript(
-        source: 'player.requestFullscreen();');
+    return evaluateJavascript(source: 'player.requestFullscreen();');
   }
 
   Future<void> exitFullscreen() async {
-    return webViewController?.evaluateJavascript(
-        source: 'player.exitFullscreen();');
+    return evaluateJavascript(source: 'player.exitFullscreen();');
   }
 
   Future<void> requestPictureInPicture() async {
-    return webViewController?.evaluateJavascript(
-        source: 'player.requestPictureInPicture();');
+    return evaluateJavascript(source: 'player.requestPictureInPicture();');
   }
 
   Future<void> exitPictureInPicture() async {
-    return webViewController?.evaluateJavascript(
-        source: 'player.exitPictureInPicture();');
+    return evaluateJavascript(source: 'player.exitPictureInPicture();');
   }
 
   Future<bool> isTracking() async {
@@ -106,7 +116,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   }
 
   Future<List<dynamic>> textTracks() async {
-    return webViewController?.evaluateJavascript(source: '''
+    return evaluateJavascript(source: '''
  (function() {
         var textTracks = player.textTracks();
         var arrayList = [];
@@ -130,13 +140,12 @@ return JSON.stringify(arrayList);
     })();
 
 ''').then((v) {
-          return jsonDecode(v.toString());
-        }) ??
-        [];
+      return jsonDecode(v.toString());
+    });
   }
 
   Future<List<dynamic>> audioTracks() async {
-    return webViewController?.evaluateJavascript(source: '''
+    return evaluateJavascript(source: '''
  (function() {
         var audioTracks = player.audioTracks();
          var arrayList = [];
@@ -158,13 +167,12 @@ return JSON.stringify(arrayList);
     })();
 
 ''').then((v) {
-          return jsonDecode(v.toString());
-        }) ??
-        [];
+      return jsonDecode(v.toString());
+    });
   }
 
   Future<void>? changeTextTrack(String id) {
-    return webViewController?.evaluateJavascript(source: '''
+    return evaluateJavascript(source: '''
   (function(){
 
    var tracks = player.textTracks();
@@ -183,7 +191,7 @@ return JSON.stringify(arrayList);
   }
 
   Future<void>? changeAudioTracks(String id) {
-    return webViewController?.evaluateJavascript(source: '''
+    return evaluateJavascript(source: '''
   (function(){
 
    var tracks = player.audioTracks();
@@ -208,7 +216,7 @@ return JSON.stringify(arrayList);
     required String label,
     String? id,
   }) {
-    return webViewController?.evaluateJavascript(source: '''
+    return evaluateJavascript(source: '''
   (function(){
 // 
    player.addRemoteTextTrack({

@@ -13,7 +13,7 @@ class WebPlayerValue {
     this.currentTime = 0,
     this.duration = 0,
     this.bufferedPercent = 0,
-    this.isPaused = false,
+    this.isPaused = true,
     this.isFullScreen = false,
     this.isInPictureInPicture = false,
     this.isTracking = false,
