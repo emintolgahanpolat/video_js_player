@@ -1,6 +1,7 @@
-// Player Mobile UI Initialization
-function addMobileUI(player) {
-    const video = player.el();
+
+videojs.registerPlugin('mobileUiPlugin', function () {
+    var player = this;
+    const videoContainer = player.el();
 
 
     const mobileControlDiv = document.createElement('div');
@@ -43,7 +44,7 @@ function addMobileUI(player) {
     mobileControlDiv.appendChild(forwardBtn);
 
     // Append controls to the video container
-    video.appendChild(mobileControlDiv);
+    videoContainer.appendChild(mobileControlDiv);
 
 
     // Top Controls Container
@@ -64,9 +65,24 @@ function addMobileUI(player) {
     }
 
 
+    videoContainer.appendChild(topControlDiv);
 
-    video.appendChild(topControlDiv);
+    // videoContainer.addEventListener('touchstart', function (event) {
+    //     if (event.touches.length === 1) {
+    //         var touchX = event.touches[0].clientX;
+    //         var videoWidth = videoContainer.clientWidth;
+    //         var seekTime = 5; // 5 saniye ileri veya geri
 
+    //         if (touchX < videoWidth * 0.3) {
+    //             // Sol tarafa dokundu -> Geri sar
+    //             player.currentTime(Math.max(0, player.currentTime() - seekTime));
+    //         } else if (touchX > videoWidth * 0.7) {
+    //             // Sağ tarafa dokundu -> İleri sar
+    //             player.currentTime(Math.min(player.duration(), player.currentTime() + seekTime));
+    //         }
+    //     }
+    // });
 
-}
+});
+
 
