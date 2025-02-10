@@ -43,25 +43,22 @@
             if (bufferedPercent === Infinity || isNaN(bufferedPercent)) {
                 bufferedPercent = 0;
             }
-            // _callHandler("bufferedPercent", bufferedPercent);
+            _callHandler("bufferedPercent", bufferedPercent);
         });
-
         player.on("timeupdate", (event) => {
             var currentTime = player.currentTime()
             if (currentTime === Infinity || isNaN(currentTime)) {
                 currentTime = 0
             }
 
-            // _callHandler("currentTime", currentTime);
+            _callHandler("currentTime", currentTime);
         });
         player.on("volumechange", (event) => {
             _callHandler("volumechange", player.muted() ? 0 : player.volume());
         });
-
         player.on("muted", (event) => {
             _callHandler("muted", player.muted());
         });
-
         player.on("ratechange", (event) => {
             _callHandler("ratechange", player.playbackRate());
         });
@@ -71,7 +68,6 @@
         player.on("seeked", (event) => {
             _callHandler("seeked", true);
         });
-
         player.on("ready", (event) => {
             _callHandler("ready", true);
 
@@ -163,19 +159,15 @@
             _callHandler("durationchange", duration);
             _callHandler("isTracking", player.liveTracker.isTracking());
         });
-
         player.on(["play", "pause"], (event) => {
             _callHandler("pause", player.paused());
         });
-
         player.on(["enterpictureinpicture", "leavepictureinpicture"], (event) => {
             _callHandler("enterpictureinpicture", player.isInPictureInPicture());
         });
-
         player.on("ended", (event) => {
             _callHandler("ended", player.ended());
         });
-
         player.on("error", (event) => {
             var error = player.error();
             _callHandler("error", {
@@ -183,10 +175,9 @@
                 message: error.message
             });
         });
-
         function _callHandler(method, args) {
             console.log(method, args);
-            // window.flutter_inappwebview.callHandler(method, args);
+            window.flutter_inappwebview.callHandler(method, args);
         }
 
     </script>
