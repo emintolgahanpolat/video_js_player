@@ -9,8 +9,10 @@ String videoJsHtml(WebPlayerSource source) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link href="https://vjs.zencdn.net/8.12.0/video-js.css" rel="stylesheet" />
-    <link href="https://videojs-http-streaming.netlify.app/node_modules/videojs-contrib-quality-levels/dist/videojs-contrib-quality-levels.js">
     <title>Video Oynatıcı</title>
+
+      <link rel="stylesheet" href="assets/videojs/mobile-ui.min.css">
+    <script src="assets/videojs/mobile-ui.js"></script>
     <style>
         body,
         html {
@@ -42,9 +44,20 @@ String videoJsHtml(WebPlayerSource source) {
             errorDisplay: $kDebugMode,
             autoplay:${source.autoPlay},
             controls: ${source.customControlsBuilder == null},
-         
+            controlBar: {
+                  playToggle: true,
+                  volumePanel: false,
+                  fullscreenToggle: true,
+                  subsCapsButton: true,
+                  audioTrackButton: true,
+                  pictureInPictureToggle: true,
+              },
         });
-          player.on("progress", (event) => {
+       addMobileUI(player);
+    </script>
+        <script>
+        // handler
+        player.on("progress", (event) => {
 
             var bufferedPercent = player.bufferedPercent();
             if (bufferedPercent === Infinity || isNaN(bufferedPercent)) {
@@ -82,8 +95,82 @@ String videoJsHtml(WebPlayerSource source) {
         player.on("ready", (event) => {
             _callHandler("ready", true);
 
-            _callHandler("audioTracks", player.audioTracks());
-            _callHandler("textTracks", player.textTracks());
+        });
+        player.on('loadedmetadata', function () {
+            var audioTracks = player.audioTracks();
+            var audioTracksList = [];
+            for (var i = 0; i < audioTracks.length; i++) {
+                var track = audioTracks[i];
+                var trackObj = {
+                    default: track.default || false,
+                    enabled: track.enabled || false,
+                    id: track.id || '',
+                    kind: track.kind,
+                    label: track.label,
+                    language: track.language,
+                    mode: track.mode
+                };
+                audioTracksList.push(trackObj);
+            }
+            _callHandler("audioTracks", audioTracksList);
+
+            var textTracks = player.textTracks();
+            var textTracksList = [];
+
+            Array.from(textTracks).forEach(function (track) {
+                if (track.kind === 'subtitles' || track.kind === 'captions') {
+                    var trackObj = {
+                        default: track.default || false,
+                        id: track.id || '',
+                        kind: track.kind,
+                        label: track.label,
+                        language: track.language,
+                        mode: track.mode
+                    };
+                    textTracksList.push(trackObj);
+                }
+            });
+
+            _callHandler("textTracks", textTracksList);
+        });
+        player.audioTracks().on("change", (event) => {
+            var audioTracks = player.audioTracks();
+            var audioTracksList = [];
+            for (var i = 0; i < audioTracks.length; i++) {
+                var track = audioTracks[i];
+                var trackObj = {
+                    default: track.default || false,
+                    enabled: track.enabled || false,
+                    id: track.id || '',
+                    kind: track.kind,
+                    label: track.label,
+                    language: track.language,
+                    mode: track.mode
+                };
+                audioTracksList.push(trackObj);
+            }
+            _callHandler("audioTracks", audioTracksList);
+        });
+        player.textTracks().on("change", (event) => {
+
+            var textTracks = player.textTracks();
+            var textTracksList = [];
+
+            Array.from(textTracks).forEach(function (track) {
+                if (track.kind === 'subtitles' || track.kind === 'captions') {
+                    var trackObj = {
+                        default: track.default || false,
+                        id: track.id || '',
+                        kind: track.kind,
+                        label: track.label,
+                        language: track.language,
+                        mode: track.mode
+                    };
+                    textTracksList.push(trackObj);
+                }
+            });
+
+            _callHandler("textTracks", textTracksList);
         });
         player.on("fullscreenchange", (event) => {
             _callHandler("fullscreenchange", player.isFullscreen());
@@ -116,9 +203,10 @@ String videoJsHtml(WebPlayerSource source) {
                 message: error.message
             });
         });
+
         function _callHandler(method, args) {
             console.log(method, args);
-             window.flutter_inappwebview.callHandler(method, args);
+            // window.flutter_inappwebview.callHandler(method, args);
         }
 
     </script>

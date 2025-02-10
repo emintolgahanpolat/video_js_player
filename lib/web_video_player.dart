@@ -46,14 +46,16 @@ class _WebPlayerState extends State<WebPlayer> {
       child: Stack(
         children: [
           InAppWebView(
-            initialData: InAppWebViewInitialData(
-              data: _videoPlayerController.source!.type ==
-                      WebPlayerSourceType.videoJs
-                  ? videoJsHtml(_videoPlayerController.source!)
-                  : iframeHtml(_videoPlayerController.source!),
-              encoding: 'utf-8',
-              mimeType: 'text/html',
-            ),
+            initialFile: "packages/video_js_player/assets/videojs/index.html",
+
+            // initialData: InAppWebViewInitialData(
+            //   data: _videoPlayerController.source!.type ==
+            //           WebPlayerSourceType.videoJs
+            //       ? videoJsHtml(_videoPlayerController.source!)
+            //       : iframeHtml(_videoPlayerController.source!),
+            //   encoding: 'utf-8',
+            //   mimeType: 'text/html',
+            // ),
             initialSettings: InAppWebViewSettings(
               mediaPlaybackRequiresUserGesture: false,
               transparentBackground: true,
