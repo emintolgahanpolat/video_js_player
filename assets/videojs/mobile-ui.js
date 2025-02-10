@@ -1,88 +1,102 @@
-
 videojs.registerPlugin('mobileUiPlugin', function () {
     var player = this;
     const videoContainer = player.el();
 
-
+    // Mobil Kontrol Çubuğu
     const mobileControlDiv = document.createElement('div');
     mobileControlDiv.classList.add('mobile-vjs-control');
 
-    // Rewind button
-    const rewindBtn = document.createElement('button');
-    rewindBtn.className = 'vjs-replay-button vjs-control vjs-button';
-    const rewindSpan = document.createElement('span')
-    rewindSpan.classList.add('vjs-icon-placeholder')
-    rewindBtn.appendChild(rewindSpan)
-    const rewindContent = document.createElement('span')
-    rewindContent.classList.add('vjs-control-text')
-    rewindContent.innerText = "Rewind"
-    rewindBtn.appendChild(rewindContent)
-
-    rewindBtn.addEventListener('click', () => {
+    // Geri Sar Butonu
+    const rewindBtn = createControlButton('vjs-replay-button', 'Rewind', () => {
         player.currentTime(player.currentTime() - 10);
     });
 
-
-    // Forward button
-    const forwardBtn = document.createElement('button');
-    forwardBtn.className = 'vjs-forward-button vjs-control vjs-button';
-    const forwardSpan = document.createElement('span')
-    forwardSpan.classList.add('vjs-icon-placeholder')
-    forwardBtn.appendChild(forwardSpan)
-    const forwardContent = document.createElement('span')
-    forwardContent.classList.add('vjs-control-text')
-    forwardContent.innerText = "Forward"
-    forwardBtn.appendChild(forwardContent)
-
-    forwardBtn.addEventListener('click', () => {
+    // İleri Sar Butonu
+    const forwardBtn = createControlButton('vjs-forward-button', 'Forward', () => {
         player.currentTime(player.currentTime() + 10);
     });
 
-    // Append buttons to controls div
+    // Butonları ekleyelim
     mobileControlDiv.appendChild(rewindBtn);
     mobileControlDiv.appendChild(player.controlBar.playToggle.el());
     mobileControlDiv.appendChild(forwardBtn);
-
-    // Append controls to the video container
     videoContainer.appendChild(mobileControlDiv);
 
-
-    // Top Controls Container
+    // Üst Kontroller
     const topControlDiv = document.createElement('div');
     topControlDiv.classList.add('mobile-vjs-control-top');
 
-    if (player.controlBar.subsCapsButton) {
-        topControlDiv.appendChild(player.controlBar.subsCapsButton.el());
-    }
-    if (player.controlBar.audioTrackButton) {
-        topControlDiv.appendChild(player.controlBar.audioTrackButton.el());
-    }
-    if (player.controlBar.pictureInPictureToggle) {
-        topControlDiv.appendChild(player.controlBar.pictureInPictureToggle.el());
-    }
-    if (player.controlBar.fullscreenToggle) {
-        topControlDiv.appendChild(player.controlBar.fullscreenToggle.el());
-    }
+    appendControlIfExists(topControlDiv, player.controlBar.subsCapsButton);
+    appendControlIfExists(topControlDiv, player.controlBar.audioTrackButton);
+    appendControlIfExists(topControlDiv, player.controlBar.pictureInPictureToggle);
+    appendControlIfExists(topControlDiv, player.controlBar.fullscreenToggle);
 
-
+    // Kaplama Butonu
+    let isFill = false;
+    const coverBtn = createControlButton('vjs-cover-control', 'Cover', () => {
+        isFill = !isFill;
+        player.setCover(isFill);
+    });
+    topControlDiv.appendChild(coverBtn);
     videoContainer.appendChild(topControlDiv);
-
-    // videoContainer.addEventListener('touchstart', function (event) {
-    //     if (event.touches.length === 1) {
-    //         var touchX = event.touches[0].clientX;
-    //         var videoWidth = videoContainer.clientWidth;
-    //         var seekTime = 5; // 5 saniye ileri veya geri
-
-    //         if (touchX < videoWidth * 0.3) {
-    //             // Sol tarafa dokundu -> Geri sar
-    //             player.currentTime(Math.max(0, player.currentTime() - seekTime));
-    //         } else if (touchX > videoWidth * 0.7) {
-    //             // Sağ tarafa dokundu -> İleri sar
-    //             player.currentTime(Math.min(player.duration(), player.currentTime() + seekTime));
-    //         }
-    //     }
-    // });
-
 });
 
+// Video Kaplama Modunu Ayarlayan Plugin
+videojs.registerPlugin('setCover', function (enable) {
+    const videoContainer = this.el();
+    videoContainer.classList.toggle('vjs-cover', enable);
+});
 
+// Dokunarak Geri/İleri Sarma Plugin'i
+videojs.registerPlugin('setTouchTime', function (enable) {
+    const player = this;
+    const videoContainer = player.el();
+
+    function handleTouch(event) {
+        if (event.touches.length === 1) {
+            const touchX = event.touches[0].clientX;
+            const videoWidth = videoContainer.clientWidth;
+            const seekTime = 5;
+
+            if (touchX < videoWidth * 0.3) {
+                player.currentTime(Math.max(0, player.currentTime() - seekTime));
+            } else if (touchX > videoWidth * 0.7) {
+                player.currentTime(Math.min(player.duration(), player.currentTime() + seekTime));
+            }
+        }
+    }
+
+    if (enable) {
+        if (!videoContainer.hasTouchListener) {
+            videoContainer.addEventListener('touchstart', handleTouch);
+            videoContainer.hasTouchListener = true;
+        }
+    } else {
+        videoContainer.removeEventListener('touchstart', handleTouch);
+        videoContainer.hasTouchListener = false;
+    }
+});
+
+// Yardımcı Fonksiyonlar
+function createControlButton(className, text, onClick) {
+    const button = document.createElement('button');
+    button.className = `${className} vjs-control vjs-button`;
+
+    const iconSpan = document.createElement('span');
+    iconSpan.classList.add('vjs-icon-placeholder');
+    button.appendChild(iconSpan);
+
+    const textSpan = document.createElement('span');
+    textSpan.classList.add('vjs-control-text');
+    textSpan.innerText = text;
+    button.appendChild(textSpan);
+
+    button.addEventListener('click', onClick);
+    return button;
+}
+
+function appendControlIfExists(parent, control) {
+    if (control) {
+        parent.appendChild(control.el());
+    }
+}
