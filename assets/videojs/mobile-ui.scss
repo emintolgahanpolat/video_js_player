@@ -172,6 +172,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 
 // Mobile Control Visiblity 
+
 .vjs-has-started .mobile-vjs-control,
 .vjs-audio-only-mode .mobile-vjs-control,
 .vjs-has-started .mobile-vjs-control-top,
@@ -182,13 +183,12 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     transition: visibility 0.1s, opacity 0.1s;
 }
 
-.vjs-controls-disabled .mobile-vjs-control,
-.vjs-using-native-controls .mobile-vjs-control,
-.vjs-error .mobile-vjs-control,
-.vjs-controls-disabled .mobile-vjs-control-top,
-.vjs-using-native-controls .mobile-vjs-control-top,
-.vjs-error .mobile-vjs-control-top {
-    display: none !important;
+.vjs-has-started.vjs-user-inactive.vjs-playing .mobile-vjs-control,
+.vjs-has-started.vjs-user-inactive.vjs-playing .mobile-vjs-control-top {
+    visibility: visible;
+    opacity: 0;
+    pointer-events: none;
+    transition: visibility 1s, opacity 1s;
 }
 
 // Icons Start 
