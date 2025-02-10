@@ -38,11 +38,6 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 }
 
-.video-js .vjs-time-control {
-
-    font-size: 1.5em;
-    line-height: 1.5em;
-}
 
 .video-js .vjs-big-play-button {
     // display: none !important;
@@ -59,6 +54,21 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     background-color: #ffffff00;
     transition: all 0s;
 }
+
+.video-js .vjs-progress-control:hover .vjs-progress-holder {
+    font-size: 2em;
+}
+
+.video-js .vjs-progress-control .vjs-progress-holder {
+    font-size: 2em;
+}
+
+.video-js .vjs-time-control {
+
+    font-size: 1.5em;
+    line-height: 2em;
+}
+
 
 // Mobile Control Start
 .mobile-vjs-controls {

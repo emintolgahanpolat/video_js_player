@@ -26,11 +26,6 @@
   border-left-color: #ff0000 !important;
 }
 
-.video-js .vjs-time-control {
-  font-size: 1.5em;
-  line-height: 1.5em;
-}
-
 .video-js .vjs-big-play-button {
   border: 0;
   background-color: rgba(255, 255, 255, 0);
@@ -44,6 +39,19 @@
   background-color: rgba(255, 255, 255, 0);
   background-color: rgba(255, 255, 255, 0);
   transition: all 0s;
+}
+
+.video-js .vjs-progress-control:hover .vjs-progress-holder {
+  font-size: 2em;
+}
+
+.video-js .vjs-progress-control .vjs-progress-holder {
+  font-size: 2em;
+}
+
+.video-js .vjs-time-control {
+  font-size: 1.5em;
+  line-height: 2em;
 }
 
 .mobile-vjs-controls {

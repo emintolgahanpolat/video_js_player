@@ -50,8 +50,6 @@ function addMobileUI(player) {
     const topControlDiv = document.createElement('div');
     topControlDiv.classList.add('mobile-vjs-controls-top');
 
-    // Kontrollü ekleme (Butonlar yoksa hata almamak için)
-
     if (player.controlBar.subsCapsButton) {
         topControlDiv.appendChild(player.controlBar.subsCapsButton.el());
     }
@@ -68,36 +66,6 @@ function addMobileUI(player) {
 
 
     video.appendChild(topControlDiv);
-
-
-    // // Top Controls Container
-    // const leftControlDiv = document.createElement('div');
-    // leftControlDiv.classList.add('mobile-vjs-controls-left');
-
-    // // Kontrollü ekleme (Butonlar yoksa hata almamak için)
-    // var volumePanel = player.controlBar.volumePanel.el()
-    // volumePanel.classList.add("mobile-vjs-volume-panel-vertical")
-    // leftControlDiv.appendChild(volumePanel);
-
-
-
-
-    // video.appendChild(leftControlDiv);
-
-    // player.on('useractive', () => {
-    //     mobileControlDiv.style.display = 'flex';
-    //     topControlDiv.style.display = 'flex';
-
-    // });
-
-    // // Listen for when user stops interacting with the player
-    // player.on('userinactive', () => {
-    //     mobileControlDiv.style.display = 'none';
-    //     topControlDiv.style.display = 'none';
-
-    // });
-
-
 
 
 }
