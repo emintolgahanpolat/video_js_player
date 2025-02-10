@@ -8,7 +8,6 @@
         href="https://videojs-http-streaming.netlify.app/node_modules/videojs-contrib-quality-levels/dist/videojs-contrib-quality-levels.js">
     <title>Video Oynatıcı</title>
 
-    <link rel="stylesheet" href="dist/style.min.css">
     <link rel="stylesheet" href="dist/mobile-ui.min.css">
     <script src="mobile-ui.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
@@ -45,18 +44,20 @@
             errorDisplay: true,
             autoplay: true,
             controls: true,
-            // controlBar: {
-            //     playToggle: false,
-            //     volumePanel: false,
-            //     fullscreenToggle: false,
-            //     subsCapsButton: false,
-            //     audioTrackButton: false,
-            //     pictureInPictureToggle: false,
-            // },
+            controlBar: {
+                playToggle: true,
+                volumePanel: false,
+                fullscreenToggle: true,
+                subsCapsButton: true,
+                audioTrackButton: true,
+                pictureInPictureToggle: true,
+            },
 
         });
 
-        addMobileUI(player);
+        player.ready(() => {
+            addMobileUI(player);
+        });
     </script>
     <script>
         // handler
