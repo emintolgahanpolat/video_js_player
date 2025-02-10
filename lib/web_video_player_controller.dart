@@ -28,11 +28,11 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   }
 
   Future<void> load(WebPlayerSource source) {
-    switch (source.type) {
-      case WebPlayerSourceType.videoJs:
-        return videoJs(source);
-      default:
+    switch (source.sources.first.type) {
+      case WebPlayerVideoSourceType.iframe:
         return iframe(source);
+      default:
+        return videoJs(source);
     }
   }
 

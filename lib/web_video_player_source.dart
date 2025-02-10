@@ -7,11 +7,12 @@ class WebPlayerVideoSource {
   WebPlayerVideoSource(this.src, this.type);
 }
 
-enum WebPlayerVideoSourceType { mpegURL, mp4, ogg, webm }
+enum WebPlayerVideoSourceType { iframe, mpegURL, mp4, ogg, webm }
 
 extension WebPlayerVideoSourceTypeEx on WebPlayerVideoSourceType {
   String get typeText {
     return switch (this) {
+      WebPlayerVideoSourceType.iframe => "iframe",
       WebPlayerVideoSourceType.mpegURL => "application/x-mpegURL",
       WebPlayerVideoSourceType.mp4 => "video/mp4",
       WebPlayerVideoSourceType.ogg => "video/ogg",
@@ -42,8 +43,7 @@ class WebPlayerSource {
       customControlsBuilder;
   final String? url;
   final String? poster;
-  final WebPlayerSourceType type;
-  final List<WebPlayerVideoSource>? sources;
+  final List<WebPlayerVideoSource> sources;
   final bool autoPlay;
 
   // String get source => [...?_sources]
@@ -60,13 +60,12 @@ class WebPlayerSource {
   WebPlayerSource._({
     this.url,
     this.poster,
-    required this.type,
     this.customControlsBuilder,
-    this.sources,
+    required this.sources,
     bool? autoPlay,
   }) : autoPlay = autoPlay ?? false;
 
-  static WebPlayerSource withUrl(
+  static WebPlayerSource iframe(
     String url, {
     String? poster,
     bool? autoPlay,
@@ -74,14 +73,13 @@ class WebPlayerSource {
     return WebPlayerSource._(
         url: url,
         poster: poster,
-        type: WebPlayerSourceType.iframe,
         autoPlay: autoPlay,
+        sources: [WebPlayerVideoSource(url, WebPlayerVideoSourceType.iframe)],
         customControlsBuilder: null);
   }
 
-  static WebPlayerSource videoJs(
-      {WebPlayerVideoSource? source,
-      String? poster,
+  static WebPlayerSource source(WebPlayerVideoSource? source,
+      {String? poster,
       bool? autoPlay,
       List<WebPlayerVideoSource>? sources,
       final Widget Function(WebVideoPlayerController controller)?
@@ -92,11 +90,8 @@ class WebPlayerSource {
     }
     return WebPlayerSource._(
         poster: poster,
-        type: WebPlayerSourceType.videoJs,
         autoPlay: autoPlay,
         sources: sources0,
         customControlsBuilder: customControlsBuilder);
   }
 }
-
-enum WebPlayerSourceType { iframe, videoJs }
