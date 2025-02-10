@@ -7,6 +7,11 @@
     <link
         href="https://videojs-http-streaming.netlify.app/node_modules/videojs-contrib-quality-levels/dist/videojs-contrib-quality-levels.js">
     <title>Video Oynatıcı</title>
+
+    <link rel="stylesheet" href="dist/style.min.css">
+    <link rel="stylesheet" href="dist/mobile-ui.min.css">
+    <script src="mobile-ui.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <style>
         body,
         html {
@@ -28,20 +33,33 @@
 </head>
 
 <body>
-    <video id="videoPlayer" class="video-js" poster="${source.poster}" controls playsinline preload="auto">
+    <video id="videoPlayer" class="video-js" controls playsinline preload="auto">
         <source src="https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8"
             type="application/x-mpegURL" />
 
     </video>
     <script src="https://vjs.zencdn.net/8.12.0/video.min.js"></script>
+
     <script>
         var player = videojs("videoPlayer", {
             errorDisplay: true,
             autoplay: true,
             controls: true,
+            // controlBar: {
+            //     playToggle: false,
+            //     volumePanel: false,
+            //     fullscreenToggle: false,
+            //     subsCapsButton: false,
+            //     audioTrackButton: false,
+            //     pictureInPictureToggle: false,
+            // },
 
         });
 
+        addMobileUI(player);
+    </script>
+    <script>
+        // handler
         player.on("progress", (event) => {
 
             var bufferedPercent = player.bufferedPercent();

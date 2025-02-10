@@ -1,0 +1,77 @@
+.vjs-big-play-button {
+  display: none !important;
+}
+
+.mobile-vjs-controls {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -4.5em;
+  margin-left: -18em;
+}
+
+.mobile-vjs-controls .vjs-control {
+  height: auto;
+  font-size: 3em;
+}
+
+.mobile-vjs-controls-top {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0.1s, opacity 0.1s;
+}
+
+.mobile-vjs-controls-top .vjs-menu-button-popup .vjs-menu {
+  display: none;
+  position: absolute;
+  top: 0em;
+  width: 10em;
+  right: -3em;
+  height: 0em;
+  margin-top: 1.5em;
+  border-bottom-color: rgba(43, 51, 63, 0.7);
+}
+
+.vjs-menu-button-popup .vjs-menu .vjs-menu-content {
+  top: 1.5em;
+  bottom: auto;
+}
+
+/* 10 saniye geri sarma ikonu */
+.vjs-icon-replay-10:before,
+.video-js .vjs-replay-button .vjs-icon-placeholder::before {
+  content: "\f2ea";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 600;
+}
+
+.vjs-icon-forward-10:before,
+.video-js .vjs-forward-button .vjs-icon-placeholder::before {
+  content: "\f2f9";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 600;
+}
+
+.vjs-icon-play:before,
+.video-js .vjs-play-control .vjs-icon-placeholder:before,
+.video-js .vjs-big-play-button .vjs-icon-placeholder:before {
+  content: "\f04b";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 600;
+}
+
+.vjs-icon-pause:before,
+.video-js .vjs-play-control.vjs-playing .vjs-icon-placeholder:before {
+  content: "\f04c";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 600;
+}
+
+.mobile-vjs-volume-panel-vertical {
+  top: 10em;
+  transform: rotate(270deg);
+}
