@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:video_js_player/web_video_player_controller.dart';
-import 'package:video_js_player/web_video_player_source.dart';
-import 'package:video_js_player/web_video_player_util.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class WebPlayer extends StatefulWidget {
