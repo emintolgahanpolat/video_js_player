@@ -78,17 +78,12 @@ class _WebPlayerBuilderState extends State<WebPlayerBuilder>
     );
     final child = widget.builder(context, player);
 
-    return GestureDetector(
-      onDoubleTap: () {
-        widget.player.controller.toggleFullScreenMode();
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return orientation == Orientation.portrait
+            ? child
+            : Material(color: Colors.black, child: Center(child: player));
       },
-      child: OrientationBuilder(
-        builder: (context, orientation) {
-          return orientation == Orientation.portrait
-              ? child
-              : Material(color: Colors.black, child: Center(child: player));
-        },
-      ),
     );
   }
 }
