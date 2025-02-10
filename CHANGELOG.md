@@ -1,5 +1,9 @@
 ## 0.0.10
 
+- videojs mobile ui plugin added 
+
+## 0.0.10
+
 - webview_flutter changed inappwebview 
 
 ## 0.0.9
