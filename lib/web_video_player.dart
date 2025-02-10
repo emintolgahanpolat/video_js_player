@@ -71,9 +71,16 @@ class _WebPlayerState extends State<WebPlayer> {
               _videoPlayerController.evaluateJavascript(
                   source:
                       "player.controls(${_videoPlayerController.source?.customControlsBuilder == null});");
+
+              if (_videoPlayerController.source?.poster != null) {
+                _videoPlayerController.evaluateJavascript(
+                    source:
+                        "player.poster('${_videoPlayerController.source?.poster}');");
+              }
+
               if (_videoPlayerController.source?.sources != null) {
                 _videoPlayerController
-                    .src(_videoPlayerController.source!.sources!);
+                    .src(_videoPlayerController.source!.sources);
 
                 if (_videoPlayerController.source!.autoPlay) {
                   _videoPlayerController.play();

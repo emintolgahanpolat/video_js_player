@@ -120,11 +120,11 @@ class _HomePageState extends State<HomePage> {
             ? WebPlayerVideoSourceType.iframe
             : WebPlayerVideoSourceType.mpegURL,
       ),
-      autoPlay: true,
+      autoPlay: false,
       poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
-      customControlsBuilder: (controller) {
-        return CustomWebPlayerController(controller);
-      },
+      // customControlsBuilder: (controller) {
+      //   return CustomWebPlayerController(controller);
+      // },
     ));
 
     super.initState();
