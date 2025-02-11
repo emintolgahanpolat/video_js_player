@@ -113,19 +113,19 @@ class _HomePageState extends State<HomePage> {
                 ],
               ));
     });
-    controller.load(WebPlayerSource.source(
-      WebPlayerVideoSource(
-        widget.url,
-        widget.isIframe
-            ? WebPlayerVideoSourceType.iframe
-            : WebPlayerVideoSourceType.mpegURL,
-      ),
-      autoPlay: false,
-      poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
-      customControlsBuilder: (controller) {
-        return CustomWebPlayerController(controller);
-      },
-    ));
+    controller.load(widget.isIframe
+        ? WebPlayerSource.iframe(widget.url)
+        : WebPlayerSource.source(
+            WebPlayerVideoSource.source(
+              widget.url,
+              WebPlayerVideoSourceType.mpegURL,
+            ),
+            autoPlay: false,
+            poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
+            customControlsBuilder: (controller) {
+              return CustomWebPlayerController(controller);
+            },
+          ));
 
     super.initState();
   }

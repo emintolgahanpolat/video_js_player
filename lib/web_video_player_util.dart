@@ -1,9 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:video_js_player/web_video_player_source.dart';
 
-String videoJsHtml(WebPlayerSource source) {
+String videoJsHtml() {
   return """
-  <head>
+<head>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,52 +10,47 @@ String videoJsHtml(WebPlayerSource source) {
     <link href="https://vjs.zencdn.net/8.12.0/video-js.css" rel="stylesheet" />
     <title>Video Oynatıcı</title>
 
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-    <link rel="stylesheet" href="packages/video_js_player/assets/mobile-ui.css">
-    <script src="packages/video_js_player/assets/mobile-ui.js"></script>
-    <style>
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-          height: 100%;
-           overflow: hidden;
-         background-color:black;
-        }
+    <link rel="stylesheet" href="mobile-ui.css">
+
+</head>
+
+<body>
+    <video id="videoPlayer" class="video-js" controls playsinline preload="auto">
 
 
-        .video-js {
-            width: 100%;
-            height: 100%;   
-             background-color:black;
-             content: none;
-        }
-    </style>
-  </head>
 
-  <body>
-    <video id="videoPlayer" class="video-js" poster="${source.poster}" controls playsinline preload="auto"  >
-        <source src="${source.url}" type="application/x-mpegURL" />
-      
+
     </video>
     <script src="https://vjs.zencdn.net/8.12.0/video.min.js"></script>
+    <script src="mobile-ui.js"></script>
     <script>
         var player = videojs("videoPlayer", {
-            errorDisplay: $kDebugMode,
-            autoplay:${source.autoPlay},
-            controls: ${source.customControlsBuilder == null},
+            errorDisplay: true,
+            autoplay: false,
+            controls: false,
             controlBar: {
-                  playToggle: true,
-                  volumePanel: false,
-                  fullscreenToggle: true,
-                  subsCapsButton: true,
-                  audioTrackButton: true,
-                  pictureInPictureToggle: true,
-              },
-        });
-        addMobileUI(player);
+                playToggle: true,
+                volumePanel: false,
+                fullscreenToggle: true,
+                subsCapsButton: true,
+                audioTrackButton: true,
+                pictureInPictureToggle: true,
+            },
 
+        });
+        if (window.flutter_inappwebview === undefined) {
+            player.src({
+                src: "https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8",
+                type: "application/x-mpegURL"
+            });
+            player.controls(true);
+        }
+        player.mobileUiPlugin();
+
+        player.on(["useractive", "userinactive"], (event) => {
+            _callHandler("useractive", event.type == "useractive");
+        });
         player.on("progress", (event) => {
 
             var bufferedPercent = player.bufferedPercent();
@@ -196,12 +190,18 @@ String videoJsHtml(WebPlayerSource source) {
             });
         });
         function _callHandler(method, args) {
-            // console.log(method, args);
-            window.flutter_inappwebview.callHandler(method, args);
+
+            if (window.flutter_inappwebview) {
+                window.flutter_inappwebview.callHandler(method, args);
+            } else {
+                console.log(method, args);
+            }
+
         }
 
     </script>
-  </body>
+</body>
+
 """;
 }
 
@@ -233,7 +233,7 @@ String iframeHtml(WebPlayerSource source) {
 <body>
 
 
-   <iframe src="${source.url}" frameborder="0" autoplay=${source.autoPlay} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+   <iframe src="${source.sources.first.src}" controls= alse frameborder="0" autoplay=${source.autoPlay} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 </body>
 """;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:video_js_player/web_video_player_controller.dart';
+import 'package:video_js_player/web_video_player_source.dart';
+import 'package:video_js_player/web_video_player_util.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class WebPlayer extends StatefulWidget {
@@ -44,15 +46,20 @@ class _WebPlayerState extends State<WebPlayer> {
       child: Stack(
         children: [
           InAppWebView(
-            initialFile: "packages/video_js_player/assets/videojs/index.html",
-            // initialData: InAppWebViewInitialData(
-            //   data: _videoPlayerController.source.type ==
-            //           WebPlayerSourceType.videoJs
-            //       ? videoJsHtml(_videoPlayerController.source)
-            //       : iframeHtml(_videoPlayerController.source),
-            //   encoding: 'utf-8',
-            //   mimeType: 'text/html',
-            // ),
+            initialFile:
+                _videoPlayerController.source?.sources.firstOrNull?.type ==
+                        WebPlayerVideoSourceType.iframe.typeText
+                    ? null
+                    : "packages/video_js_player/assets/videojs/index.html",
+            initialData:
+                _videoPlayerController.source?.sources.firstOrNull?.type ==
+                        WebPlayerVideoSourceType.iframe.typeText
+                    ? InAppWebViewInitialData(
+                        data: iframeHtml(_videoPlayerController.source!),
+                        encoding: 'utf-8',
+                        mimeType: 'text/html',
+                      )
+                    : null,
             initialSettings: InAppWebViewSettings(
               mediaPlaybackRequiresUserGesture: false,
               transparentBackground: true,
@@ -70,13 +77,14 @@ class _WebPlayerState extends State<WebPlayer> {
                   source:
                       "player.controls(${_videoPlayerController.source?.customControlsBuilder == null});");
 
-              if (_videoPlayerController.source?.poster != null) {
-                _videoPlayerController.evaluateJavascript(
-                    source:
-                        "player.poster('${_videoPlayerController.source?.poster}');");
-              }
-
-              if (_videoPlayerController.source?.sources != null) {
+              if (_videoPlayerController.source != null &&
+                  _videoPlayerController.source?.sources.first.type !=
+                      WebPlayerVideoSourceType.iframe.typeText) {
+                if (_videoPlayerController.source?.poster != null) {
+                  _videoPlayerController.evaluateJavascript(
+                      source:
+                          "player.poster('${_videoPlayerController.source?.poster}');");
+                }
                 _videoPlayerController
                     .src(_videoPlayerController.source!.sources);
 
@@ -98,6 +106,13 @@ class _WebPlayerState extends State<WebPlayer> {
                   _videoPlayerController.setError(params[0]);
                 },
               );
+              controller.addJavaScriptHandler(
+                  handlerName: "useractive",
+                  callback: (params) {
+                    _videoPlayerController.updateValue(_videoPlayerController
+                        .value
+                        .copyWith(isUserActive: params[0]));
+                  });
               controller.addJavaScriptHandler(
                   handlerName: "pause",
                   callback: (params) {

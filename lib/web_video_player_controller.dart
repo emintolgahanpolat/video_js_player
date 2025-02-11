@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:video_js_player/web_video_player_source.dart';
-import 'package:video_js_player/web_video_player_util.dart';
 import 'package:video_js_player/web_video_player_value.dart';
 
 typedef WebPlayerErrorListerner = void Function(String message);
@@ -27,26 +26,10 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
     _errorListerner = listener;
   }
 
-  Future<void> load(WebPlayerSource source) {
-    switch (source.sources.first.type) {
-      case WebPlayerVideoSourceType.iframe:
-        return iframe(source);
-      default:
-        return videoJs(source);
-    }
-  }
-
   WebPlayerSource? _source;
   WebPlayerSource? get source => _source;
-  Future<void> videoJs(WebPlayerSource source) async {
+  void load(WebPlayerSource source) {
     _source = source;
-    return webViewController?.loadData(data: videoJsHtml(source));
-  }
-
-  Future<void> iframe(WebPlayerSource source) async {
-    _source = source;
-
-    return webViewController?.loadData(data: iframeHtml(source));
   }
 
   void updateValue(WebPlayerValue newValue) => value = newValue;
@@ -75,7 +58,7 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   Future<dynamic>? src(List<WebPlayerVideoSource> source) {
     return evaluateJavascript(
         source:
-            'player.src({ type: "${source.first.type.typeText}", src: "${source.first.src}" });');
+            'player.src({ type: "${source.first.type}", src: "${source.first.src}" });');
   }
 
   Future<dynamic>? seekTo(double timeInSecond) {

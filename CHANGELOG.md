@@ -1,5 +1,9 @@
 ## 0.0.11
 
+- videojs mobile ui bug fixed
+
+## 0.0.11
+
 - videojs mobile ui plugin added 
 
 ## 0.0.10

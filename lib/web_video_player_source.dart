@@ -3,8 +3,17 @@ import 'package:video_js_player/web_video_player_controller.dart';
 
 class WebPlayerVideoSource {
   final String src;
-  final WebPlayerVideoSourceType type;
+  final String type;
   WebPlayerVideoSource(this.src, this.type);
+
+  static WebPlayerVideoSource iframe(String src) {
+    return WebPlayerVideoSource(src, WebPlayerVideoSourceType.iframe.typeText);
+  }
+
+  static WebPlayerVideoSource source(
+      String src, WebPlayerVideoSourceType tyle) {
+    return WebPlayerVideoSource(src, tyle.typeText);
+  }
 }
 
 enum WebPlayerVideoSourceType { iframe, mpegURL, mp4, ogg, webm }
@@ -41,7 +50,7 @@ enum WebPlayerVideoTrackType {
 class WebPlayerSource {
   final Widget Function(WebVideoPlayerController controller)?
       customControlsBuilder;
-  final String? url;
+
   final String? poster;
   final List<WebPlayerVideoSource> sources;
   final bool autoPlay;
@@ -58,7 +67,6 @@ class WebPlayerSource {
   //     .toString();
 
   WebPlayerSource._({
-    this.url,
     this.poster,
     this.customControlsBuilder,
     required this.sources,
@@ -71,11 +79,10 @@ class WebPlayerSource {
     bool? autoPlay,
   }) {
     return WebPlayerSource._(
-        url: url,
-        poster: poster,
-        autoPlay: autoPlay,
-        sources: [WebPlayerVideoSource(url, WebPlayerVideoSourceType.iframe)],
-        customControlsBuilder: null);
+      poster: poster,
+      autoPlay: autoPlay,
+      sources: [WebPlayerVideoSource.iframe(url)],
+    );
   }
 
   static WebPlayerSource source(WebPlayerVideoSource? source,

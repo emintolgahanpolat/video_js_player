@@ -9,7 +9,8 @@ class WebPlayerValue {
   bool isFullScreen;
   bool isInPictureInPicture;
   bool isTracking;
-  bool isFluid;
+  bool isCover;
+  bool isUserActive;
   WebPlayerValue({
     this.currentTime = 0,
     this.duration = 0,
@@ -18,7 +19,8 @@ class WebPlayerValue {
     this.isFullScreen = false,
     this.isInPictureInPicture = false,
     this.isTracking = false,
-    this.isFluid = false,
+    this.isCover = false,
+    this.isUserActive = false,
     this.webViewController,
   });
 
@@ -30,7 +32,8 @@ class WebPlayerValue {
     bool? isFullScreen,
     bool? isInPictureInPicture,
     bool? isTracking,
-    bool? isFluid,
+    bool? isCover,
+    bool? isUserActive,
     InAppWebViewController? webViewController,
   }) {
     return WebPlayerValue(
@@ -41,7 +44,8 @@ class WebPlayerValue {
       isFullScreen: isFullScreen ?? this.isFullScreen,
       isInPictureInPicture: isInPictureInPicture ?? this.isInPictureInPicture,
       isTracking: isTracking ?? this.isTracking,
-      isFluid: isFluid ?? this.isFluid,
+      isCover: isCover ?? this.isCover,
+      isUserActive: isUserActive ?? this.isUserActive,
       webViewController: webViewController ?? this.webViewController,
     );
   }

@@ -21,6 +21,10 @@ $primary-foreground-color: #fff;
 $primary-background-color: #000;
 $center-big-play-button: false;
 
+.video-js .mobile-vjs-control-top {
+    margin-top: 2em;
+}
+
 .video-js .vjs-control-bar {
     margin-bottom: 2em;
 }
@@ -172,6 +176,16 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 
 // Mobile Control Visiblity 
+
+.vjs-controls-disabled .mobile-vjs-control,
+.vjs-using-native-controls .mobile-vjs-control,
+.vjs-error .mobile-vjs-control,
+.vjs-controls-disabled .mobile-vjs-control-top,
+.vjs-using-native-controls .mobile-vjs-control-top,
+.vjs-error .mobile-vjs-control-top {
+    display: none !important;
+}
+
 
 .vjs-has-started .mobile-vjs-control,
 .vjs-audio-only-mode .mobile-vjs-control,
