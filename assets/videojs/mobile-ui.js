@@ -7,12 +7,12 @@ videojs.registerPlugin('mobileUiPlugin', function () {
     mobileControlDiv.classList.add('mobile-vjs-control');
 
     // Geri Sar Butonu
-    const rewindBtn = createControlButton('vjs-replay-button', 'Rewind', () => {
+    const rewindBtn = createControlButton('vjs-replay-control', 'Rewind', () => {
         player.currentTime(player.currentTime() - 10);
     });
 
     // İleri Sar Butonu
-    const forwardBtn = createControlButton('vjs-forward-button', 'Forward', () => {
+    const forwardBtn = createControlButton('vjs-forward-control', 'Forward', () => {
         player.currentTime(player.currentTime() + 10);
     });
 
@@ -26,6 +26,10 @@ videojs.registerPlugin('mobileUiPlugin', function () {
     const topControlDiv = document.createElement('div');
     topControlDiv.classList.add('mobile-vjs-control-top');
 
+    const closeBtn = createControlButton('vjs-close-control', 'Close', () => {
+
+    });
+    topControlDiv.appendChild(closeBtn);
     appendControlIfExists(topControlDiv, player.controlBar.subsCapsButton);
     appendControlIfExists(topControlDiv, player.controlBar.audioTrackButton);
     appendControlIfExists(topControlDiv, player.controlBar.pictureInPictureToggle);

@@ -46,20 +46,20 @@ class _WebPlayerState extends State<WebPlayer> {
       child: Stack(
         children: [
           InAppWebView(
-            initialFile:
-                _videoPlayerController.source?.sources.firstOrNull?.type ==
-                        WebPlayerVideoSourceType.iframe.typeText
-                    ? null
-                    : "packages/video_js_player/assets/videojs/index.html",
-            initialData:
-                _videoPlayerController.source?.sources.firstOrNull?.type ==
-                        WebPlayerVideoSourceType.iframe.typeText
-                    ? InAppWebViewInitialData(
-                        data: iframeHtml(_videoPlayerController.source!),
-                        encoding: 'utf-8',
-                        mimeType: 'text/html',
-                      )
-                    : null,
+            // initialFile:
+            //     _videoPlayerController.source?.sources.firstOrNull?.type ==
+            //             WebPlayerVideoSourceType.iframe.typeText
+            //         ? null
+            //         : "packages/video_js_player/assets/videojs/index.html",
+            // initialData:
+            //     _videoPlayerController.source?.sources.firstOrNull?.type ==
+            //             WebPlayerVideoSourceType.iframe.typeText
+            //         ? InAppWebViewInitialData(
+            //             data: iframeHtml(_videoPlayerController.source!),
+            //             encoding: 'utf-8',
+            //             mimeType: 'text/html',
+            //           )
+            //         : null,
             initialSettings: InAppWebViewSettings(
               mediaPlaybackRequiresUserGesture: false,
               transparentBackground: true,
@@ -91,6 +91,20 @@ class _WebPlayerState extends State<WebPlayer> {
                 if (_videoPlayerController.source!.autoPlay) {
                   _videoPlayerController.play();
                 }
+              } else {
+                print(
+                    "iframe inject: ${iframeHtml(_videoPlayerController.source!)}");
+
+                _videoPlayerController.evaluateJavascript(source: """
+const iframe = document.createElement("iframe");
+iframe.src = "${_videoPlayerController.source!.sources.first.src}";
+iframe.width = "100%";
+iframe.height = "100%";
+document.body.appendChild(iframe);
+""");
+                // _videoPlayerController.evaluateJavascript(
+                // source:
+                // "document.body.innerHTML += '${iframeHtml(_videoPlayerController.source!)}'");
               }
             },
             onWebViewCreated: (controller) {
@@ -100,6 +114,16 @@ class _WebPlayerState extends State<WebPlayer> {
                 ),
               );
 
+              if (_videoPlayerController.source?.sources.firstOrNull?.type ==
+                  WebPlayerVideoSourceType.iframe.typeText) {
+                _videoPlayerController.webViewController?.loadFile(
+                    assetFilePath:
+                        "packages/video_js_player/assets/videojs/iframe.html");
+              } else {
+                _videoPlayerController.webViewController?.loadFile(
+                    assetFilePath:
+                        "packages/video_js_player/assets/videojs/index.html");
+              }
               controller.addJavaScriptHandler(
                 handlerName: "error",
                 callback: (params) {

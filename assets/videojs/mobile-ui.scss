@@ -207,7 +207,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 // Icons Start 
 .vjs-icon-replay-10:before,
-.video-js .vjs-replay-button .vjs-icon-placeholder::before {
+.video-js .vjs-replay-control .vjs-icon-placeholder::before {
     content: "\f2ea";
     font-family: "Font Awesome 6 Free";
     font-weight: 600;
@@ -215,7 +215,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 
 .vjs-icon-forward-10:before,
-.video-js .vjs-forward-button .vjs-icon-placeholder::before {
+.video-js .vjs-forward-control .vjs-icon-placeholder::before {
     content: "\f2f9";
     font-family: "Font Awesome 6 Free";
     font-weight: 600;
@@ -341,4 +341,31 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     content: "\f422";
     font-family: "Font Awesome 6 Free";
     font-weight: 600;
+}
+
+
+// close button
+
+
+
+
+.vjs-icon-close:before,
+.video-js .vjs-close-control .vjs-icon-placeholder:before {
+    content: "\f00d";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 600;
+}
+
+.video-js .vjs-close-control {
+    cursor: pointer;
+    flex: none;
+}
+
+.vjs-close video {
+    object-fit: cover;
+}
+
+.video-js .vjs-close-control {
+    flex: 1;
+    text-align: left;
 }
