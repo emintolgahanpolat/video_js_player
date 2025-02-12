@@ -65,6 +65,11 @@ class _WebPlayerState extends State<WebPlayer> {
               transparentBackground: true,
               disableContextMenu: true,
               supportZoom: false,
+              clearCache: true,
+              cacheMode: CacheMode.LOAD_NO_CACHE,
+              cacheEnabled: false,
+              clearSessionCache: true,
+              javaScriptCanOpenWindowsAutomatically: true,
               disableHorizontalScroll: false,
               disableVerticalScroll: false,
               allowsInlineMediaPlayback: true,
@@ -92,9 +97,6 @@ class _WebPlayerState extends State<WebPlayer> {
                   _videoPlayerController.play();
                 }
               } else {
-                print(
-                    "iframe inject: ${iframeHtml(_videoPlayerController.source!)}");
-
                 _videoPlayerController.evaluateJavascript(source: """
 const iframe = document.createElement("iframe");
 iframe.src = "${_videoPlayerController.source!.sources.first.src}";
@@ -102,9 +104,6 @@ iframe.width = "100%";
 iframe.height = "100%";
 document.body.appendChild(iframe);
 """);
-                // _videoPlayerController.evaluateJavascript(
-                // source:
-                // "document.body.innerHTML += '${iframeHtml(_videoPlayerController.source!)}'");
               }
             },
             onWebViewCreated: (controller) {

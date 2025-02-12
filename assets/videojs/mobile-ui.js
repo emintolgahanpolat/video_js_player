@@ -26,10 +26,6 @@ videojs.registerPlugin('mobileUiPlugin', function () {
     const topControlDiv = document.createElement('div');
     topControlDiv.classList.add('mobile-vjs-control-top');
 
-    const closeBtn = createControlButton('vjs-close-control', 'Close', () => {
-
-    });
-    topControlDiv.appendChild(closeBtn);
     appendControlIfExists(topControlDiv, player.controlBar.subsCapsButton);
     appendControlIfExists(topControlDiv, player.controlBar.audioTrackButton);
     appendControlIfExists(topControlDiv, player.controlBar.pictureInPictureToggle);

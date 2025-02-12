@@ -1,4 +1,3 @@
-import 'package:example/custom_web_player_controller_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:video_js_player/video_js_player.dart';
 
@@ -122,9 +121,9 @@ class _HomePageState extends State<HomePage> {
             ),
             autoPlay: false,
             poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
-            customControlsBuilder: (controller) {
-              return CustomWebPlayerController(controller);
-            },
+            // customControlsBuilder: (controller) {
+            //   return CustomWebPlayerController(controller);
+            // },
           ));
 
     super.initState();
