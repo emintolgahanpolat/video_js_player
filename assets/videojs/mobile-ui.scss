@@ -13,6 +13,9 @@ html {
     height: 100%;
 }
 
+.video-js .vjs-control {
+    height: 4em;
+}
 
 // Mobile UI
 
@@ -166,7 +169,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 }
 
 
-.vjs-menu-button-popup .vjs-menu .vjs-menu-content {
+.mobile-vjs-control-top .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
 
     top: 1.5em;
     bottom: auto;
@@ -312,7 +315,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     font-weight: 600;
 }
 
-// Icons End 
+// Cover Button 
 
 .vjs-icon-cover-enter,
 .video-js .vjs-cover-control .vjs-icon-placeholder {
@@ -344,10 +347,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 }
 
 
-// close button
-
-
-
+// Mobile Close button
 
 .vjs-icon-close:before,
 .video-js .vjs-close-control .vjs-icon-placeholder:before {
@@ -367,9 +367,8 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 
 
-// title
-
-.vjs-title-bar {
+// Mobile Title Bar
+.mobile-vjs-title-bar {
     flex: auto;
     position: relative;
     margin: 0;

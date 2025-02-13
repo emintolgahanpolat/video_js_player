@@ -1,7 +1,6 @@
-videojs.registerPlugin('mobileUiPlugin', function () {
+videojs.registerPlugin('mobileControl', function () {
     var player = this;
     const videoContainer = player.el();
-
     // Mobil Kontrol Çubuğu
     const mobileControlDiv = document.createElement('div');
     mobileControlDiv.classList.add('mobile-vjs-control');
@@ -13,6 +12,12 @@ videojs.registerPlugin('mobileUiPlugin', function () {
 
     videoContainer.appendChild(mobileControlDiv);
 
+});
+videojs.registerPlugin('mobileControlTop', function () {
+    var player = this;
+    const videoContainer = player.el();
+
+
     // Üst Kontroller
     const topControlDiv = document.createElement('div');
     topControlDiv.classList.add('mobile-vjs-control-top');
@@ -22,7 +27,9 @@ videojs.registerPlugin('mobileUiPlugin', function () {
     // const titleDiv = document.createElement('div');
     // titleDiv.innerText = "Title"
     // topControlDiv.appendChild(titleDiv)
-    topControlDiv.appendChild(player.titleBar.el());
+    var mobileTitleBar = player.titleBar.el();
+    mobileTitleBar.classList.add('mobile-vjs-title-bar');
+    topControlDiv.appendChild(mobileTitleBar);
     topControlDiv.appendChild(player.controlBar.playbackRateMenuButton.el())
     topControlDiv.appendChild(player.controlBar.subsCapsButton.el())
     topControlDiv.appendChild(player.controlBar.audioTrackButton.el())
