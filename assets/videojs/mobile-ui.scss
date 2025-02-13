@@ -21,9 +21,7 @@ $primary-foreground-color: #fff;
 $primary-background-color: #000;
 $center-big-play-button: false;
 
-.video-js .mobile-vjs-control-top {
-    margin-top: 2em;
-}
+
 
 .video-js .vjs-control-bar {
     margin-bottom: 2em;
@@ -144,11 +142,13 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 // Mobile Control End
 // Mobile Top Menu Start
-.mobile-vjs-control-top {
+.video-js .mobile-vjs-control-top {
+    margin-top: 2em;
     display: none;
     position: absolute;
     top: 0;
-    right: 0;
+    //right: 0;
+    width: 100%;
     visibility: visible;
     opacity: 1;
     transition: visibility .1s, opacity .1s;
@@ -207,7 +207,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 // Icons Start 
 .vjs-icon-replay-10:before,
-.video-js .vjs-replay-control .vjs-icon-placeholder::before {
+.video-js .vjs-skip-backward-10 .vjs-icon-placeholder:before {
     content: "\f2ea";
     font-family: "Font Awesome 6 Free";
     font-weight: 600;
@@ -215,7 +215,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 
 .vjs-icon-forward-10:before,
-.video-js .vjs-forward-control .vjs-icon-placeholder::before {
+.video-js .vjs-skip-forward-10 .vjs-icon-placeholder:before {
     content: "\f2f9";
     font-family: "Font Awesome 6 Free";
     font-weight: 600;
@@ -365,7 +365,17 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     object-fit: cover;
 }
 
-.video-js .vjs-close-control {
-    flex: 1;
-    text-align: left;
+
+
+// title
+
+.vjs-title-bar {
+    flex: auto;
+    position: relative;
+    margin: 0;
+    padding: 0em 1.333em;
+    line-height: normal;
+    width: auto;
+    display: block !important;
+    background: transparent;
 }

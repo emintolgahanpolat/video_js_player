@@ -6,38 +6,35 @@ videojs.registerPlugin('mobileUiPlugin', function () {
     const mobileControlDiv = document.createElement('div');
     mobileControlDiv.classList.add('mobile-vjs-control');
 
-    // Geri Sar Butonu
-    const rewindBtn = createControlButton('vjs-replay-control', 'Rewind', () => {
-        player.currentTime(player.currentTime() - 10);
-    });
 
-    // İleri Sar Butonu
-    const forwardBtn = createControlButton('vjs-forward-control', 'Forward', () => {
-        player.currentTime(player.currentTime() + 10);
-    });
-
-    // Butonları ekleyelim
-    mobileControlDiv.appendChild(rewindBtn);
+    mobileControlDiv.appendChild(player.controlBar.skipBackward.el())
     mobileControlDiv.appendChild(player.controlBar.playToggle.el());
-    mobileControlDiv.appendChild(forwardBtn);
+    mobileControlDiv.appendChild(player.controlBar.skipForward.el())
+
     videoContainer.appendChild(mobileControlDiv);
 
     // Üst Kontroller
     const topControlDiv = document.createElement('div');
     topControlDiv.classList.add('mobile-vjs-control-top');
+    topControlDiv.appendChild(createControlButton("vjs-close-control", "close", () => {
 
-    appendControlIfExists(topControlDiv, player.controlBar.subsCapsButton);
-    appendControlIfExists(topControlDiv, player.controlBar.audioTrackButton);
-    appendControlIfExists(topControlDiv, player.controlBar.pictureInPictureToggle);
-    appendControlIfExists(topControlDiv, player.controlBar.fullscreenToggle);
+    }))
+    // const titleDiv = document.createElement('div');
+    // titleDiv.innerText = "Title"
+    // topControlDiv.appendChild(titleDiv)
+    topControlDiv.appendChild(player.titleBar.el());
+    topControlDiv.appendChild(player.controlBar.playbackRateMenuButton.el())
+    topControlDiv.appendChild(player.controlBar.subsCapsButton.el())
+    topControlDiv.appendChild(player.controlBar.audioTrackButton.el())
+    topControlDiv.appendChild(player.controlBar.pictureInPictureToggle.el())
+    topControlDiv.appendChild(player.controlBar.fullscreenToggle.el())
 
-    // Kaplama Butonu
+
     let isFill = false;
-    const coverBtn = createControlButton('vjs-cover-control', 'Cover', () => {
+    topControlDiv.appendChild(createControlButton('vjs-cover-control', 'Cover', () => {
         isFill = !isFill;
         player.setCover(isFill);
-    });
-    topControlDiv.appendChild(coverBtn);
+    }));
     videoContainer.appendChild(topControlDiv);
 });
 
@@ -93,10 +90,4 @@ function createControlButton(className, text, onClick) {
 
     button.addEventListener('click', onClick);
     return button;
-}
-
-function appendControlIfExists(parent, control) {
-    if (control) {
-        parent.appendChild(control.el());
-    }
 }
