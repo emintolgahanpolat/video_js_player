@@ -11,7 +11,9 @@ videojs.registerPlugin('mobileControl', function () {
     mobileControlDiv.appendChild(player.controlBar.skipForward.el())
 
     videoContainer.appendChild(mobileControlDiv);
-
+    player.mobileControl = {
+        el: () => mobileControlDiv
+    };
 });
 videojs.registerPlugin('mobileControlTop', function () {
     var player = this;
@@ -21,12 +23,7 @@ videojs.registerPlugin('mobileControlTop', function () {
     // Üst Kontroller
     const topControlDiv = document.createElement('div');
     topControlDiv.classList.add('mobile-vjs-control-top');
-    topControlDiv.appendChild(createControlButton("vjs-close-control", "close", () => {
 
-    }))
-    // const titleDiv = document.createElement('div');
-    // titleDiv.innerText = "Title"
-    // topControlDiv.appendChild(titleDiv)
     var mobileTitleBar = player.titleBar.el();
     mobileTitleBar.classList.add('mobile-vjs-title-bar');
     topControlDiv.appendChild(mobileTitleBar);
@@ -43,6 +40,12 @@ videojs.registerPlugin('mobileControlTop', function () {
         player.setCover(isFill);
     }));
     videoContainer.appendChild(topControlDiv);
+
+
+    player.mobileControlTop = {
+        el: () => topControlDiv,
+        addButton: (className, order, text, onClick) => topControlDiv.appendChild(createControlButton(className, order, text, onClick))
+    };
 });
 
 // Video Kaplama Modunu Ayarlayan Plugin
@@ -82,9 +85,12 @@ videojs.registerPlugin('setTouchTime', function (enable) {
 });
 
 // Yardımcı Fonksiyonlar
-function createControlButton(className, text, onClick) {
+function createControlButton(className, order, text, onClick) {
     const button = document.createElement('button');
     button.className = `${className} vjs-control vjs-button`;
+    if (order) {
+        button.style.order = order;
+    }
 
     const iconSpan = document.createElement('span');
     iconSpan.classList.add('vjs-icon-placeholder');

@@ -59,6 +59,10 @@
         player.mobileControl();
         player.mobileControlTop();
 
+        player.mobileControlTop.addButton("vjs-close-control", -1, "close", () => {
+            _callHandler("close", true);
+        });
+
         player.on(["useractive", "userinactive"], (event) => {
             _callHandler("useractive", event.type == "useractive");
         });
