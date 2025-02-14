@@ -51,14 +51,7 @@ class _WebPlayerState extends State<WebPlayer> {
             //             mimeType: 'text/html',
             //           )
             //         : null,
-            initialOptions: InAppWebViewGroupOptions(
-              crossPlatform: InAppWebViewOptions(
-                userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-              ),
-              android: AndroidInAppWebViewOptions(
-                useShouldInterceptRequest: true,
-              ),
-            ),
+
             initialSettings: InAppWebViewSettings(
               mediaPlaybackRequiresUserGesture: false,
               transparentBackground: true,
