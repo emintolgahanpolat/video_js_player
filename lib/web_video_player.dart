@@ -51,6 +51,14 @@ class _WebPlayerState extends State<WebPlayer> {
             //             mimeType: 'text/html',
             //           )
             //         : null,
+            initialOptions: InAppWebViewGroupOptions(
+              crossPlatform: InAppWebViewOptions(
+                userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+              ),
+              android: AndroidInAppWebViewOptions(
+                useShouldInterceptRequest: true,
+              ),
+            ),
             initialSettings: InAppWebViewSettings(
               mediaPlaybackRequiresUserGesture: false,
               transparentBackground: true,
@@ -59,10 +67,7 @@ class _WebPlayerState extends State<WebPlayer> {
               javaScriptCanOpenWindowsAutomatically: true,
               disableHorizontalScroll: false,
               disableVerticalScroll: false,
-              cacheEnabled: false,
-              cacheMode: CacheMode.LOAD_NO_CACHE,
-              clearCache: true,
-              clearSessionCache: true,
+              allowUniversalAccessFromFileURLs: true,
               allowsInlineMediaPlayback: true,
               allowsAirPlayForMediaPlayback: true,
               allowsPictureInPictureMediaPlayback: true,
@@ -119,7 +124,7 @@ document.body.appendChild(iframe);
               controller.addJavaScriptHandler(
                 handlerName: "error",
                 callback: (params) {
-                  _videoPlayerController.setError(params[0]);
+                  _videoPlayerController.setError(params[0].toString());
                 },
               );
               controller.addJavaScriptHandler(
