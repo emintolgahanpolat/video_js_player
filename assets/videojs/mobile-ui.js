@@ -31,8 +31,12 @@ videojs.registerPlugin('mobileControlTop', function () {
     topControlDiv.appendChild(player.controlBar.subsCapsButton.el())
     topControlDiv.appendChild(player.controlBar.audioTrackButton.el())
     topControlDiv.appendChild(player.controlBar.pictureInPictureToggle.el())
-    topControlDiv.appendChild(player.controlBar.fullscreenToggle.el())
-
+    player.controlBar.fullscreenToggle.hide();
+    // topControlDiv.appendChild(player.controlBar.fullscreenToggle.el())
+    topControlDiv.appendChild(createControlButton('vjs-fullscreen-control', null, 'Fullscreen', () => {
+        var videoElement = player.el().querySelector('video');
+        videoElement.webkitEnterFullscreen();
+    }));
 
     let isFill = false;
     topControlDiv.appendChild(createControlButton('vjs-cover-control', 'Cover', () => {

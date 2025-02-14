@@ -11,6 +11,7 @@ class WebPlayerValue {
   bool isTracking;
   bool isCover;
   bool isUserActive;
+  bool isLoad;
   WebPlayerValue({
     this.currentTime = 0,
     this.duration = 0,
@@ -21,6 +22,7 @@ class WebPlayerValue {
     this.isTracking = false,
     this.isCover = false,
     this.isUserActive = false,
+    this.isLoad = false,
     this.webViewController,
   });
 
@@ -34,6 +36,7 @@ class WebPlayerValue {
     bool? isTracking,
     bool? isCover,
     bool? isUserActive,
+    bool? isLoad,
     InAppWebViewController? webViewController,
   }) {
     return WebPlayerValue(
@@ -46,6 +49,7 @@ class WebPlayerValue {
       isTracking: isTracking ?? this.isTracking,
       isCover: isCover ?? this.isCover,
       isUserActive: isUserActive ?? this.isUserActive,
+      isLoad: isLoad ?? this.isLoad,
       webViewController: webViewController ?? this.webViewController,
     );
   }

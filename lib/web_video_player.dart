@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:video_js_player/web_video_player_controller.dart';
 import 'package:video_js_player/web_video_player_source.dart';
-import 'package:video_js_player/web_video_player_util.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class WebPlayer extends StatefulWidget {
@@ -15,14 +15,6 @@ class WebPlayer extends StatefulWidget {
 class _WebPlayerState extends State<WebPlayer> {
   WebVideoPlayerController get _videoPlayerController => widget.controller;
   bool _wasPlayingBeforePause = false;
-
-  @override
-  void initState() {
-    // _videoPlayerController.updateValue(_videoPlayerController.value.copyWith(
-    //   webViewController: null,
-    // ));
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +66,8 @@ class _WebPlayerState extends State<WebPlayer> {
               useWideViewPort: false,
             ),
             onLoadStop: (controller, url) {
+              _videoPlayerController.updateValue(
+                  _videoPlayerController.value.copyWith(isLoad: true));
               _videoPlayerController.evaluateJavascript(
                   source:
                       "player.controls(${_videoPlayerController.source?.customControlsBuilder == null});");
@@ -123,6 +117,12 @@ document.body.appendChild(iframe);
                 handlerName: "error",
                 callback: (params) {
                   _videoPlayerController.setError(params[0]);
+                },
+              );
+              controller.addJavaScriptHandler(
+                handlerName: "close",
+                callback: (params) {
+                  _videoPlayerController.setClose();
                 },
               );
               controller.addJavaScriptHandler(

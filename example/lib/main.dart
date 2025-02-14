@@ -31,9 +31,7 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  final TextEditingController _editingController = TextEditingController(
-      text:
-          "https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8");
+  final TextEditingController _editingController = TextEditingController();
   var isIframe = false;
   @override
   Widget build(BuildContext context) {
@@ -77,7 +75,33 @@ class _WelcomePageState extends State<WelcomePage> {
                                 isIframe: isIframe,
                               )));
                 },
-                child: const Text("Open Player"))
+                child: const Text("Open Player")),
+            ListTile(
+              title: const Text("Sample 1"),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => HomePage(
+                              url:
+                                  "https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8",
+                              isIframe: isIframe,
+                            )));
+              },
+            ),
+            ListTile(
+              title: const Text("Sample 2"),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => HomePage(
+                              url:
+                                  "https://d2zihajmogu5jn.cloudfront.net/elephantsdream/hls/ed_hd.m3u8",
+                              isIframe: isIframe,
+                            )));
+              },
+            )
           ],
         ),
       ),
@@ -111,6 +135,18 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ));
+    });
+    controller.addListener(() {
+      if (controller.value.isLoad) {
+        controller.setTitle(title: "Test", description: "App Test");
+      }
+    });
+    controller.closeListener(() {
+      if (!controller.value.isFullScreen) {
+        Navigator.pop(context);
+      } else {
+        controller.toggleFullScreenMode();
+      }
     });
     controller.load(widget.isIframe
         ? WebPlayerSource.iframe(widget.url)

@@ -8,13 +8,14 @@ import 'package:video_js_player/web_video_player_source.dart';
 import 'package:video_js_player/web_video_player_value.dart';
 
 typedef WebPlayerErrorListerner = void Function(String message);
+typedef CloseListener = void Function();
 
 class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   InAppWebViewController? get webViewController => value.webViewController;
   WebVideoPlayerController() : super(WebPlayerValue());
   static WebVideoPlayerController? of(BuildContext context) {
     return context
-        .dependOnInheritedWidgetOfExactType<InheritedYoutubePlayer>()
+        .dependOnInheritedWidgetOfExactType<InheritedWebVideoPlayer>()
         ?.controller;
   }
 
@@ -27,6 +28,15 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
     _errorListerner = listener;
   }
 
+  void setClose() {
+    _closeListener?.call();
+  }
+
+  CloseListener? _closeListener;
+  void closeListener(CloseListener listener) {
+    _closeListener = listener;
+  }
+
   WebPlayerSource? _source;
   WebPlayerSource? get source => _source;
   void load(WebPlayerSource source) {
@@ -36,8 +46,11 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   void updateValue(WebPlayerValue newValue) => value = newValue;
 
   void toggleFullScreenMode() {
-    value.isFullScreen = !value.isFullScreen;
-    if (value.isFullScreen) {
+    var fs = value.isFullScreen;
+    updateValue(value.copyWith(isFullScreen: !fs));
+    if (!fs) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+          overlays: [SystemUiOverlay.top]);
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
@@ -60,6 +73,12 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
     return evaluateJavascript(
         source:
             'player.src({ type: "${source.first.type}", src: "${source.first.src}" });');
+  }
+
+  Future<void> setTitle({String? title, String? description}) async {
+    return evaluateJavascript(
+        source:
+            ' player.titleBar.update({ title: "${title ?? ""}", description: "${description ?? ""}" });');
   }
 
   Future<dynamic>? seekTo(double timeInSecond) {
@@ -223,9 +242,9 @@ return JSON.stringify(arrayList);
 }
 
 /// An inherited widget to provide [WebVideoPlayerController] to it's descendants.
-class InheritedYoutubePlayer extends InheritedWidget {
-  /// Creates [InheritedYoutubePlayer]
-  const InheritedYoutubePlayer({
+class InheritedWebVideoPlayer extends InheritedWidget {
+  /// Creates [InheritedWebVideoPlayer]
+  const InheritedWebVideoPlayer({
     super.key,
     required this.controller,
     required super.child,
@@ -235,7 +254,7 @@ class InheritedYoutubePlayer extends InheritedWidget {
   final WebVideoPlayerController controller;
 
   @override
-  bool updateShouldNotify(InheritedYoutubePlayer oldWidget) {
+  bool updateShouldNotify(InheritedWebVideoPlayer oldWidget) {
     return oldWidget.controller.hashCode != controller.hashCode;
   }
 }
