@@ -39,7 +39,7 @@ videojs.registerPlugin('mobileControlTop', function () {
     }));
 
     let isFill = false;
-    topControlDiv.appendChild(createControlButton('vjs-cover-control', 'Cover', () => {
+    topControlDiv.appendChild(createControlButton('vjs-cover-control', null, 'Cover', () => {
         isFill = !isFill;
         player.setCover(isFill);
     }));

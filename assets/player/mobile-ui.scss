@@ -147,7 +147,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 // Mobile Top Menu Start
 .video-js .mobile-vjs-control-top {
     margin-top: 2em;
-    display: none;
+    display: flex;
     position: absolute;
     top: 0;
     //right: 0;
