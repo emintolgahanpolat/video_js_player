@@ -59,6 +59,10 @@ class _WebPlayerState extends State<WebPlayer> {
               javaScriptCanOpenWindowsAutomatically: true,
               disableHorizontalScroll: false,
               disableVerticalScroll: false,
+              cacheEnabled: false,
+              cacheMode: CacheMode.LOAD_NO_CACHE,
+              clearCache: true,
+              clearSessionCache: true,
               allowsInlineMediaPlayback: true,
               allowsAirPlayForMediaPlayback: true,
               allowsPictureInPictureMediaPlayback: true,
@@ -106,11 +110,11 @@ document.body.appendChild(iframe);
                   WebPlayerVideoSourceType.iframe.typeText) {
                 _videoPlayerController.webViewController?.loadFile(
                     assetFilePath:
-                        "packages/video_js_player/assets/videojs/iframe.html");
+                        "packages/video_js_player/assets/player/iframe.html");
               } else {
                 _videoPlayerController.webViewController?.loadFile(
                     assetFilePath:
-                        "packages/video_js_player/assets/videojs/index.html");
+                        "packages/video_js_player/assets/player/index.html");
               }
               controller.addJavaScriptHandler(
                 handlerName: "error",

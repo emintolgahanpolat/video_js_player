@@ -82,10 +82,10 @@ class _WelcomePageState extends State<WelcomePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => HomePage(
+                        builder: (_) => const HomePage(
                               url:
                                   "https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8",
-                              isIframe: isIframe,
+                              isIframe: false,
                             )));
               },
             ),
@@ -95,10 +95,10 @@ class _WelcomePageState extends State<WelcomePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => HomePage(
+                        builder: (_) => const HomePage(
                               url:
                                   "https://d2zihajmogu5jn.cloudfront.net/elephantsdream/hls/ed_hd.m3u8",
-                              isIframe: isIframe,
+                              isIframe: false,
                             )));
               },
             )
