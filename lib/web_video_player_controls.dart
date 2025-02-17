@@ -156,14 +156,14 @@ class _WebVideoPlayerControlsState extends State<WebVideoPlayerControls> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
         onTap: _handlerGesture,
         child: AnimatedContainer(
             duration: const Duration(milliseconds: 500),
             child: controlVisible
                 ? ValueListenableBuilder(
                     valueListenable: controller,
-                    builder: (context, value, child) {
+                    builder: (c, value, child) {
                       return Stack(
                         children: [
                           Positioned(
@@ -176,7 +176,7 @@ class _WebVideoPlayerControlsState extends State<WebVideoPlayerControls> {
                                   if (controller.value.isFullScreen)
                                     IconButton(
                                       onPressed: () {
-                                        controller.toggleFullScreenMode();
+                                        Navigator.pop(context);
                                       },
                                       icon: const Icon(
                                         Icons.arrow_back,

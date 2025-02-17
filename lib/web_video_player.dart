@@ -9,7 +9,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 typedef WebPlayerErrorBuilder = Widget Function(
     BuildContext context, String error);
 typedef WebPlayerControlsBuilder = Widget Function(
-    WebVideoPlayerController controller);
+    BuildContext context, WebVideoPlayerController controller);
 
 class WebPlayer extends StatefulWidget {
   final WebVideoPlayerController controller;
@@ -93,6 +93,7 @@ class _WebPlayerState extends State<WebPlayer> {
         const iframe = document.createElement("iframe");
         iframe.src = "${_videoPlayerController.source!.src}";
         iframe.autoPlay = ${_videoPlayerController.source?.autoPlay ?? false} 
+        iframe.controls = false;
         iframe.width = "100%";
         iframe.height = "100%";
         document.body.appendChild(iframe);
@@ -204,34 +205,61 @@ class _WebPlayerState extends State<WebPlayer> {
                     });
               },
             ),
-            if (_videoPlayerController.source?.type !=
-                WebPlayerVideoSourceType.iframe.typeText)
-              ValueListenableBuilder(
-                  valueListenable: _videoPlayerController,
-                  builder: (c, snapshot, w) {
-                    if (snapshot.errorMessage != null) {
-                      return widget.errorBuilder == null
-                          ? Container(
-                              width: double.infinity,
-                              height: double.infinity,
-                              padding: EdgeInsets.all(24),
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                _videoPlayerController.value.errorMessage!,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ))
-                          : widget.errorBuilder!(
-                              c, _videoPlayerController.value.errorMessage!);
+            ValueListenableBuilder(
+                valueListenable: _videoPlayerController,
+                builder: (c, snapshot, w) {
+                  if (snapshot.errorMessage != null) {
+                    return widget.errorBuilder == null
+                        ? Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            padding: EdgeInsets.all(24),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              _videoPlayerController.value.errorMessage!,
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ))
+                        : widget.errorBuilder!(
+                            c, _videoPlayerController.value.errorMessage!);
+                  } else {
+                    if (_videoPlayerController.source?.type ==
+                            WebPlayerVideoSourceType.iframe.typeText &&
+                        widget.controlsBuilder == null) {
+                      return Stack(
+                        children: [
+                          Positioned(
+                            left: 8,
+                            top: 8,
+                            child: IconButton.filled(
+                              style: IconButton.styleFrom(
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .surface
+                                    .withValues(alpha: 0.3),
+                                foregroundColor:
+                                    Theme.of(context).colorScheme.onSurface,
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(
+                                Icons.arrow_back,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
                     } else {
                       return widget.controlsBuilder == null
                           ? WebVideoPlayerControls(
                               controller: _videoPlayerController)
                           : widget.controlsBuilder!
-                              .call(_videoPlayerController);
+                              .call(context, _videoPlayerController);
                     }
-                  }),
+                  }
+                }),
           ],
         ),
       ),

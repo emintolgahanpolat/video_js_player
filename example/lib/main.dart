@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_js_player/video_js_player.dart';
+import 'package:video_js_player/web_video_player_controls.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,7 +44,7 @@ class _WelcomePageState extends State<WelcomePage> {
       appBar: AppBar(
         title: const Text("Player"),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -105,6 +106,19 @@ class _WelcomePageState extends State<WelcomePage> {
                               isIframe: false,
                             )));
               },
+            ),
+            ListTile(
+              title: const Text("Youtube 2"),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const HomePage(
+                              url:
+                                  "https://www.youtube.com/embed/oRS-HtAYqI4?si=9iAM74ZkVZs6hO8T",
+                              isIframe: true,
+                            )));
+              },
             )
           ],
         ),
@@ -126,27 +140,12 @@ class _HomePageState extends State<HomePage> {
   var controller = WebVideoPlayerController();
   @override
   void initState() {
-    // controller.setErrorListener((error) {
-    //   showAdaptiveDialog(
-    //       context: context,
-    //       builder: (c) => AlertDialog(
-    //             title: const Text("Error"),
-    //             content: Text(error),
-    //             actions: [
-    //               TextButton(
-    //                 onPressed: () => Navigator.pop(context),
-    //                 child: const Text('Ok'),
-    //               ),
-    //             ],
-    //           ));
-    // });
-
     controller.load(widget.isIframe
         ? WebPlayerSource.iframe(widget.url)
         : WebPlayerSource.video(
             widget.url,
             WebPlayerVideoSourceType.mpegURL,
-            autoPlay: true,
+            autoPlay: false,
             poster:
                 "https://i.ebayimg.com/images/g/lVMAAOSwhQheYrmk/s-l400.jpg",
           ));
