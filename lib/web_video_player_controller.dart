@@ -8,7 +8,6 @@ import 'package:video_js_player/web_video_player_source.dart';
 import 'package:video_js_player/web_video_player_value.dart';
 
 typedef WebPlayerErrorListerner = void Function(String message);
-typedef CloseListener = void Function();
 
 class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
   InAppWebViewController? get webViewController => value.webViewController;
@@ -17,24 +16,6 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedWebVideoPlayer>()
         ?.controller;
-  }
-
-  void setError(String error) {
-    _errorListerner?.call(error);
-  }
-
-  WebPlayerErrorListerner? _errorListerner;
-  void setErrorListener(WebPlayerErrorListerner listener) {
-    _errorListerner = listener;
-  }
-
-  void setClose() {
-    _closeListener?.call();
-  }
-
-  CloseListener? _closeListener;
-  void closeListener(CloseListener listener) {
-    _closeListener = listener;
   }
 
   WebPlayerSource? _source;
@@ -73,12 +54,6 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
     return evaluateJavascript(
         source:
             'player.src({ type: "${source.first.type}", src: "${source.first.src}" });');
-  }
-
-  Future<void> setTitle({String? title, String? description}) async {
-    return evaluateJavascript(
-        source:
-            ' player.titleBar.update({ title: "${title ?? ""}", description: "${description ?? ""}" });');
   }
 
   Future<dynamic>? seekTo(double timeInSecond) {
@@ -123,62 +98,6 @@ var videoElement = player.el().querySelector('video');
             source: '(function(){return  player.liveTracker.isTracking();})()')
         .then((v) => bool.tryParse(v.toString()) ?? false);
     return false;
-  }
-
-  Future<List<dynamic>> textTracks() async {
-    return evaluateJavascript(source: '''
- (function() {
-        var textTracks = player.textTracks();
-        var arrayList = [];
-
-        Array.from(textTracks).forEach(function(track) {
-            if (track.kind === 'subtitles' || track.kind === 'captions') {
-              var trackObj = {
-                            default: track.default || false,
-                            id: track.id || '',
-                            kind: track.kind,
-                            label: track.label,
-                            language: track.language,
-                            mode: track.mode
-                        };
-                   arrayList.push(trackObj);
-            }
-        });
-
-return JSON.stringify(arrayList);
-
-    })();
-
-''').then((v) {
-      return jsonDecode(v.toString());
-    });
-  }
-
-  Future<List<dynamic>> audioTracks() async {
-    return evaluateJavascript(source: '''
- (function() {
-        var audioTracks = player.audioTracks();
-         var arrayList = [];
-        Array.from(audioTracks).forEach(function(track) {
-         var trackObj = {
-                            default: track.default || false,
-                            enabled: track.enabled || false,
-                            id: track.id || '',
-                            kind: track.kind,
-                            label: track.label,
-                            language: track.language,
-                            mode: track.mode
-                        };
-             arrayList.push(trackObj);
-        });
-
-return JSON.stringify(arrayList);
-
-    })();
-
-''').then((v) {
-      return jsonDecode(v.toString());
-    });
   }
 
   Future<void>? changeTextTrack(String id) {

@@ -1,4 +1,5 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:video_js_player/model/track_type.dart';
 
 class WebPlayerValue {
   final InAppWebViewController? webViewController;
@@ -11,7 +12,10 @@ class WebPlayerValue {
   bool isTracking;
   bool isCover;
   bool isUserActive;
-  bool isLoad;
+  bool isReady;
+  String? errorMessage;
+  List<VideoTrack>? textTracks;
+  List<VideoTrack>? audioTracks;
   WebPlayerValue({
     this.currentTime = 0,
     this.duration = 0,
@@ -22,7 +26,10 @@ class WebPlayerValue {
     this.isTracking = false,
     this.isCover = false,
     this.isUserActive = false,
-    this.isLoad = false,
+    this.isReady = false,
+    this.errorMessage,
+    this.textTracks,
+    this.audioTracks,
     this.webViewController,
   });
 
@@ -36,7 +43,10 @@ class WebPlayerValue {
     bool? isTracking,
     bool? isCover,
     bool? isUserActive,
-    bool? isLoad,
+    bool? isReady,
+    String? errorMessage,
+    List<VideoTrack>? textTracks,
+    List<VideoTrack>? audioTracks,
     InAppWebViewController? webViewController,
   }) {
     return WebPlayerValue(
@@ -49,7 +59,10 @@ class WebPlayerValue {
       isTracking: isTracking ?? this.isTracking,
       isCover: isCover ?? this.isCover,
       isUserActive: isUserActive ?? this.isUserActive,
-      isLoad: isLoad ?? this.isLoad,
+      isReady: isReady ?? this.isReady,
+      errorMessage: errorMessage ?? this.errorMessage,
+      audioTracks: audioTracks ?? this.audioTracks,
+      textTracks: textTracks ?? this.textTracks,
       webViewController: webViewController ?? this.webViewController,
     );
   }

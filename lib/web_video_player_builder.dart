@@ -52,11 +52,9 @@ class _WebPlayerBuilderState extends State<WebPlayerBuilder>
     final controller = widget.player.controller;
     if (physicalSize.width > physicalSize.height) {
       controller.updateValue(controller.value.copyWith(isFullScreen: true));
-      //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       widget.onEnterFullScreen?.call();
     } else {
       controller.updateValue(controller.value.copyWith(isFullScreen: false));
-      //SystemChrome.restoreSystemUIOverlays();
       widget.onExitFullScreen?.call();
     }
     super.didChangeMetrics();

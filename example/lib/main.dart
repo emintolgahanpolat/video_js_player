@@ -16,6 +16,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        colorScheme: const ColorScheme.dark(primary: Colors.red),
+        useMaterial3: true,
+      ),
       home: const WelcomePage(),
     );
   }
@@ -122,32 +126,21 @@ class _HomePageState extends State<HomePage> {
   var controller = WebVideoPlayerController();
   @override
   void initState() {
-    controller.setErrorListener((error) {
-      showAdaptiveDialog(
-          context: context,
-          builder: (c) => AlertDialog(
-                title: const Text("Error"),
-                content: Text(error),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Ok'),
-                  ),
-                ],
-              ));
-    });
-    controller.addListener(() {
-      if (controller.value.isLoad) {
-        controller.setTitle(title: "Test", description: "App Test");
-      }
-    });
-    controller.closeListener(() {
-      if (!controller.value.isFullScreen) {
-        Navigator.pop(context);
-      } else {
-        controller.toggleFullScreenMode();
-      }
-    });
+    // controller.setErrorListener((error) {
+    //   showAdaptiveDialog(
+    //       context: context,
+    //       builder: (c) => AlertDialog(
+    //             title: const Text("Error"),
+    //             content: Text(error),
+    //             actions: [
+    //               TextButton(
+    //                 onPressed: () => Navigator.pop(context),
+    //                 child: const Text('Ok'),
+    //               ),
+    //             ],
+    //           ));
+    // });
+
     controller.load(widget.isIframe
         ? WebPlayerSource.iframe(widget.url)
         : WebPlayerSource.source(
@@ -156,7 +149,8 @@ class _HomePageState extends State<HomePage> {
               WebPlayerVideoSourceType.mpegURL,
             ),
             autoPlay: false,
-            poster: "https://avatars.githubusercontent.com/u/3287189?s=200&v=4",
+            poster:
+                "https://i.ebayimg.com/images/g/lVMAAOSwhQheYrmk/s-l400.jpg",
             // customControlsBuilder: (controller) {
             //   return CustomWebPlayerController(controller);
             // },

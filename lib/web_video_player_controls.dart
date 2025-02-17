@@ -1,28 +1,21 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:video_js_player/model/track_type.dart';
 import 'package:video_js_player/web_video_player_controller.dart';
 
-class CustomWebPlayerController extends StatefulWidget {
-  const CustomWebPlayerController(
-    this.controller, {
-    super.key,
-  });
-
+class WebVideoPlayerControls extends StatefulWidget {
   final WebVideoPlayerController controller;
+  const WebVideoPlayerControls({super.key, required this.controller});
 
   @override
-  State<CustomWebPlayerController> createState() =>
-      _CustomWebPlayerControllerState();
+  State<WebVideoPlayerControls> createState() => _WebVideoPlayerControlsState();
 }
 
-class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
+class _WebVideoPlayerControlsState extends State<WebVideoPlayerControls> {
   WebVideoPlayerController get controller => widget.controller;
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -48,8 +41,8 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
     }
   }
 
-  Widget _buildDubbingSubtitleDialog(
-      BuildContext context, List<dynamic> dubbings, List<dynamic> subTracks) {
+  Widget _buildDubbingSubtitleDialog(BuildContext context,
+      List<VideoTrack> textTracks, List<VideoTrack> audioTracks) {
     return Theme(
       data: Theme.of(context).copyWith(
         actionIconTheme: ActionIconThemeData(
@@ -58,67 +51,105 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
           },
         ),
       ),
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  const ListTile(
-                    title: Text("Text"),
-                  ),
-                  Expanded(
-                    child: Builder(builder: (mContext) {
-                      return ListView.builder(
-                        itemCount: dubbings.length,
-                        itemBuilder: (c, i) {
-                          var item = dubbings[i];
-                          return RadioListTile(
-                              value: item["mode"],
-                              groupValue: "showing",
-                              title: Text(item["label"]),
-                              onChanged: (c) {
-                                controller.changeTextTrack(item["id"]);
-                                Navigator.pop(mContext);
-                              });
-                        },
-                      );
-                    }),
-                  ),
-                ],
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                color: Theme.of(context)
+                    .scaffoldBackgroundColor
+                    .withValues(alpha: .9),
               ),
             ),
-            Expanded(
-              child: Column(
-                children: [
-                  const ListTile(
-                    title: Text("Audio"),
+          ),
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: PreferredSize(
+                preferredSize: Size.fromHeight(kToolbarHeight),
+                child: Container(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: SafeArea(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Subtitle",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Audio",
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Close"))
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                  Expanded(
-                    child: Builder(builder: (mContext) {
-                      return ListView.builder(
-                        itemCount: subTracks.length,
-                        itemBuilder: (c, i) {
-                          var item = subTracks[i];
-                          return RadioListTile(
-                              value: item["enabled"],
-                              groupValue: true,
-                              title: Text(item["label"]),
-                              onChanged: (c) {
-                                controller.changeAudioTracks(item["id"]);
-                                Navigator.pop(mContext);
-                              });
-                        },
-                      );
-                    }),
+                )),
+            body: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    physics: ScrollPhysics(),
+                    itemCount: textTracks.length,
+                    itemBuilder: (c, i) {
+                      var item = textTracks[i];
+                      return RadioListTile(
+                          value: item.mode,
+                          groupValue: "showing",
+                          title: Text(item.label ?? ""),
+                          onChanged: (c) {
+                            controller.changeTextTrack(item.id!);
+                            Navigator.pop(context);
+                          });
+                    },
                   ),
-                ],
-              ),
+                ),
+                VerticalDivider(),
+                Expanded(
+                  child: ListView.builder(
+                    physics: ScrollPhysics(),
+                    itemCount: audioTracks.length,
+                    itemBuilder: (c, i) {
+                      var item = audioTracks[i];
+                      return RadioListTile(
+                          value: item.enabled,
+                          groupValue: true,
+                          title: Text(item.label ?? ""),
+                          onChanged: (c) {
+                            controller.changeAudioTracks(item.id!);
+                            Navigator.pop(context);
+                          });
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -153,30 +184,27 @@ class _CustomWebPlayerControllerState extends State<CustomWebPlayerController> {
                                       ),
                                     ),
                                   const Spacer(),
-                                  IconButton(
-                                    onPressed: () {
-                                      Future.wait([
-                                        controller.textTracks(),
-                                        controller.audioTracks()
-                                      ]).then((futureValue) {
+                                  if (value.audioTracks?.isNotEmpty == true ||
+                                      value.textTracks?.isNotEmpty == true)
+                                    IconButton(
+                                      onPressed: () {
                                         showGeneralDialog(
                                           // ignore: use_build_context_synchronously
                                           context: context,
-                                          barrierColor: Colors.black12
-                                              .withValues(alpha: 0.9),
+                                          barrierColor: Colors.transparent,
                                           pageBuilder: (c, _, __) =>
                                               _buildDubbingSubtitleDialog(
-                                                  c,
-                                                  futureValue.first,
-                                                  futureValue.last),
+                                            c,
+                                            value.textTracks ?? [],
+                                            value.audioTracks ?? [],
+                                          ),
                                         );
-                                      });
-                                    },
-                                    icon: const Icon(
-                                      Icons.subtitles,
-                                      color: Colors.white,
+                                      },
+                                      icon: const Icon(
+                                        Icons.subtitles,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
                                   IconButton(
                                     onPressed: () {
                                       value.isFullScreen

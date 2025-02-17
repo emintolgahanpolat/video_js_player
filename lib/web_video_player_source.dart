@@ -30,23 +30,6 @@ extension WebPlayerVideoSourceTypeEx on WebPlayerVideoSourceType {
   }
 }
 
-class WebPlayerVideoTrack {
-  String src;
-  String srcLang;
-  String label;
-  String kind;
-  WebPlayerVideoTrackType type;
-  WebPlayerVideoTrack(this.src, this.srcLang, this.kind, this.label, this.type);
-}
-
-enum WebPlayerVideoTrackType {
-  subtitles,
-  captions,
-  descriptions,
-  chapters,
-  metadata
-}
-
 class WebPlayerSource {
   final Widget Function(WebVideoPlayerController controller)?
       customControlsBuilder;
@@ -55,8 +38,8 @@ class WebPlayerSource {
   final List<WebPlayerVideoSource> sources;
   final bool autoPlay;
 
-  // String get source => [...?_sources]
-  //     .map((e) => '<source src="${e.src}" type="${e.type.typeText}" />')
+  // String get source => [...sources]
+  //     .map((e) => '<source src="${e.src}" type="${e.type}" />')
   //     .join("\n")
   //     .toString();
   // final List<WebPlayerVideoTrack>? _tracks;
