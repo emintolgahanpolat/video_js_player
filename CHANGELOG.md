@@ -1,7 +1,7 @@
 ## 0.0.16
 
 - Error Screen Builder added
-- 
+- Readme updated
 
 ## 0.0.15
 
