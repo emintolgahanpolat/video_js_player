@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:video_js_player/model/track_type.dart';
 import 'package:video_js_player/web_video_player_source.dart';
 import 'package:video_js_player/web_video_player_value.dart';
 
@@ -49,10 +50,10 @@ class WebVideoPlayerController extends ValueNotifier<WebPlayerValue> {
         source: source, contentWorld: contentWorld);
   }
 
-  Future<dynamic>? src(List<WebPlayerVideoSource> source) {
+  Future<dynamic>? src(WebPlayerSource source) {
     return evaluateJavascript(
         source:
-            'player.src({ type: "${source.first.type}", src: "${source.first.src}" });');
+            'player.src({ type: "${source.type}", src: "${source.src}" });');
   }
 
   Future<dynamic>? seekTo(double timeInSecond) {
@@ -137,22 +138,16 @@ var videoElement = player.el().querySelector('video');
 ''');
   }
 
-  Future<void>? addRemoteTextTrack({
-    required String kind,
-    required String src,
-    required String srclang,
-    required String label,
-    String? id,
-  }) {
+  Future<void>? addRemoteTextTrack(VideoTrack track) {
     return evaluateJavascript(source: '''
   (function(){
 // 
    player.addRemoteTextTrack({
-    id:'${id ?? label}',
-    kind: '$kind',
-    src: '$src',
-    srclang: '$srclang',
-    label: '$label',
+    id:'${track.id ?? track.label}',
+    kind: '${track.kind}',
+    src: '${track.src}',
+    srclang: '${track.language}',
+    label: '${track.label}',
     }, false);
   })();
 ''');

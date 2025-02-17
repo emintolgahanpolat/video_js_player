@@ -143,17 +143,12 @@ class _HomePageState extends State<HomePage> {
 
     controller.load(widget.isIframe
         ? WebPlayerSource.iframe(widget.url)
-        : WebPlayerSource.source(
-            WebPlayerVideoSource.source(
-              widget.url,
-              WebPlayerVideoSourceType.mpegURL,
-            ),
-            autoPlay: false,
+        : WebPlayerSource.video(
+            widget.url,
+            WebPlayerVideoSourceType.mpegURL,
+            autoPlay: true,
             poster:
                 "https://i.ebayimg.com/images/g/lVMAAOSwhQheYrmk/s-l400.jpg",
-            // customControlsBuilder: (controller) {
-            //   return CustomWebPlayerController(controller);
-            // },
           ));
 
     super.initState();

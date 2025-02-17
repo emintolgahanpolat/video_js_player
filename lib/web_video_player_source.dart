@@ -1,20 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:video_js_player/web_video_player_controller.dart';
-
-class WebPlayerVideoSource {
-  final String src;
-  final String type;
-  WebPlayerVideoSource(this.src, this.type);
-
-  static WebPlayerVideoSource iframe(String src) {
-    return WebPlayerVideoSource(src, WebPlayerVideoSourceType.iframe.typeText);
-  }
-
-  static WebPlayerVideoSource source(
-      String src, WebPlayerVideoSourceType tyle) {
-    return WebPlayerVideoSource(src, tyle.typeText);
-  }
-}
+import 'package:video_js_player/model/track_type.dart';
 
 enum WebPlayerVideoSourceType { iframe, mpegURL, mp4, ogg, webm }
 
@@ -31,28 +15,17 @@ extension WebPlayerVideoSourceTypeEx on WebPlayerVideoSourceType {
 }
 
 class WebPlayerSource {
-  final Widget Function(WebVideoPlayerController controller)?
-      customControlsBuilder;
-
+  final String src;
+  final String type;
   final String? poster;
-  final List<WebPlayerVideoSource> sources;
   final bool autoPlay;
-
-  // String get source => [...sources]
-  //     .map((e) => '<source src="${e.src}" type="${e.type}" />')
-  //     .join("\n")
-  //     .toString();
-  // final List<WebPlayerVideoTrack>? _tracks;
-  // String get track => [...?_tracks]
-  //     .map((e) =>
-  //         '<track kind="${e.kind}" src="${e.src}" srclang="${e.srcLang}" label="${e.label}" />" />')
-  //     .join("\n")
-  //     .toString();
+  final List<VideoTrack>? textTracks;
 
   WebPlayerSource._({
     this.poster,
-    this.customControlsBuilder,
-    required this.sources,
+    required this.src,
+    required this.type,
+    this.textTracks,
     bool? autoPlay,
   }) : autoPlay = autoPlay ?? false;
 
@@ -62,26 +35,25 @@ class WebPlayerSource {
     bool? autoPlay,
   }) {
     return WebPlayerSource._(
-      poster: poster,
-      autoPlay: autoPlay,
-      sources: [WebPlayerVideoSource.iframe(url)],
-    );
-  }
-
-  static WebPlayerSource source(WebPlayerVideoSource? source,
-      {String? poster,
-      bool? autoPlay,
-      List<WebPlayerVideoSource>? sources,
-      final Widget Function(WebVideoPlayerController controller)?
-          customControlsBuilder}) {
-    var sources0 = sources ?? [];
-    if (source != null) {
-      sources0.add(source);
-    }
-    return WebPlayerSource._(
         poster: poster,
         autoPlay: autoPlay,
-        sources: sources0,
-        customControlsBuilder: customControlsBuilder);
+        src: url,
+        type: WebPlayerVideoSourceType.iframe.typeText);
+  }
+
+  static WebPlayerSource video(
+    String src,
+    WebPlayerVideoSourceType type, {
+    String? poster,
+    bool? autoPlay,
+    List<VideoTrack>? textTracks,
+  }) {
+    return WebPlayerSource._(
+      poster: poster,
+      autoPlay: autoPlay,
+      src: src,
+      type: type.typeText,
+      textTracks: textTracks,
+    );
   }
 }

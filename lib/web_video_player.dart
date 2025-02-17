@@ -8,16 +8,21 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 typedef WebPlayerErrorBuilder = Widget Function(
     BuildContext context, String error);
+typedef WebPlayerControlsBuilder = Widget Function(
+    WebVideoPlayerController controller);
 
 class WebPlayer extends StatefulWidget {
   final WebVideoPlayerController controller;
+  final WebPlayerControlsBuilder? controlsBuilder;
   final WebPlayerErrorBuilder? errorBuilder;
   final Color backgroundColor;
-  const WebPlayer(
-      {super.key,
-      required this.controller,
-      this.errorBuilder,
-      this.backgroundColor = Colors.black});
+  const WebPlayer({
+    super.key,
+    required this.controller,
+    this.controlsBuilder,
+    this.errorBuilder,
+    this.backgroundColor = Colors.black,
+  });
   @override
   State<WebPlayer> createState() => _WebPlayerState();
 }
@@ -50,21 +55,6 @@ class _WebPlayerState extends State<WebPlayer> {
         child: Stack(
           children: [
             InAppWebView(
-              // initialFile:
-              //     _videoPlayerController.source?.sources.firstOrNull?.type ==
-              //             WebPlayerVideoSourceType.iframe.typeText
-              //         ? null
-              //         : "packages/video_js_player/assets/videojs/index.html",
-              // initialData:
-              //     _videoPlayerController.source?.sources.firstOrNull?.type ==
-              //             WebPlayerVideoSourceType.iframe.typeText
-              //         ? InAppWebViewInitialData(
-              //             data: iframeHtml(_videoPlayerController.source!),
-              //             encoding: 'utf-8',
-              //             mimeType: 'text/html',
-              //           )
-              //         : null,
-
               initialSettings: InAppWebViewSettings(
                 mediaPlaybackRequiresUserGesture: false,
                 transparentBackground: true,
@@ -84,23 +74,25 @@ class _WebPlayerState extends State<WebPlayer> {
                     _videoPlayerController.value.copyWith(isReady: true));
 
                 if (_videoPlayerController.source != null &&
-                    _videoPlayerController.source?.sources.first.type !=
+                    _videoPlayerController.source?.type !=
                         WebPlayerVideoSourceType.iframe.typeText) {
                   if (_videoPlayerController.source?.poster != null) {
                     _videoPlayerController.evaluateJavascript(
                         source:
                             "player.poster('${_videoPlayerController.source?.poster}');");
                   }
-                  _videoPlayerController
-                      .src(_videoPlayerController.source!.sources);
-
+                  _videoPlayerController.src(_videoPlayerController.source!);
+                  _videoPlayerController.source!.textTracks?.forEach((item) {
+                    _videoPlayerController.addRemoteTextTrack(item);
+                  });
                   if (_videoPlayerController.source!.autoPlay) {
                     _videoPlayerController.play();
                   }
                 } else {
                   _videoPlayerController.evaluateJavascript(source: """
         const iframe = document.createElement("iframe");
-        iframe.src = "${_videoPlayerController.source!.sources.first.src}";
+        iframe.src = "${_videoPlayerController.source!.src}";
+        iframe.autoPlay = ${_videoPlayerController.source?.autoPlay ?? false} 
         iframe.width = "100%";
         iframe.height = "100%";
         document.body.appendChild(iframe);
@@ -114,7 +106,7 @@ class _WebPlayerState extends State<WebPlayer> {
                   ),
                 );
 
-                if (_videoPlayerController.source?.sources.firstOrNull?.type ==
+                if (_videoPlayerController.source?.type ==
                     WebPlayerVideoSourceType.iframe.typeText) {
                   _videoPlayerController.webViewController?.loadFile(
                       assetFilePath:
@@ -132,13 +124,6 @@ class _WebPlayerState extends State<WebPlayer> {
                         .copyWith(errorMessage: params[0]["message"]));
                   },
                 );
-                controller.addJavaScriptHandler(
-                    handlerName: "useractive",
-                    callback: (params) {
-                      _videoPlayerController.updateValue(_videoPlayerController
-                          .value
-                          .copyWith(isUserActive: params[0]));
-                    });
                 controller.addJavaScriptHandler(
                     handlerName: "pause",
                     callback: (params) {
@@ -219,7 +204,7 @@ class _WebPlayerState extends State<WebPlayer> {
                     });
               },
             ),
-            if (_videoPlayerController.source?.sources.first.type !=
+            if (_videoPlayerController.source?.type !=
                 WebPlayerVideoSourceType.iframe.typeText)
               ValueListenableBuilder(
                   valueListenable: _videoPlayerController,
@@ -240,13 +225,10 @@ class _WebPlayerState extends State<WebPlayer> {
                           : widget.errorBuilder!(
                               c, _videoPlayerController.value.errorMessage!);
                     } else {
-                      return _videoPlayerController
-                                  .source?.customControlsBuilder ==
-                              null
+                      return widget.controlsBuilder == null
                           ? WebVideoPlayerControls(
                               controller: _videoPlayerController)
-                          : _videoPlayerController
-                              .source!.customControlsBuilder!
+                          : widget.controlsBuilder!
                               .call(_videoPlayerController);
                     }
                   }),
