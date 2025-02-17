@@ -92,14 +92,6 @@ var videoElement = player.el().querySelector('video');
     return evaluateJavascript(source: 'player.exitPictureInPicture();');
   }
 
-  Future<bool> isTracking() async {
-    webViewController
-        ?.evaluateJavascript(
-            source: '(function(){return  player.liveTracker.isTracking();})()')
-        .then((v) => bool.tryParse(v.toString()) ?? false);
-    return false;
-  }
-
   Future<void>? changeTextTrack(String id) {
     return evaluateJavascript(source: '''
   (function(){
