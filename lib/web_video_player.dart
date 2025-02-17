@@ -219,34 +219,37 @@ class _WebPlayerState extends State<WebPlayer> {
                     });
               },
             ),
-            ValueListenableBuilder(
-                valueListenable: _videoPlayerController,
-                builder: (c, snapshot, w) {
-                  if (snapshot.errorMessage != null) {
-                    return widget.errorBuilder == null
-                        ? Container(
-                            width: double.infinity,
-                            height: double.infinity,
-                            padding: EdgeInsets.all(24),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              _videoPlayerController.value.errorMessage!,
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ))
-                        : widget.errorBuilder!(
-                            c, _videoPlayerController.value.errorMessage!);
-                  } else {
-                    return _videoPlayerController
-                                .source?.customControlsBuilder ==
-                            null
-                        ? WebVideoPlayerControls(
-                            controller: _videoPlayerController)
-                        : _videoPlayerController.source!.customControlsBuilder!
-                            .call(_videoPlayerController);
-                  }
-                }),
+            if (_videoPlayerController.source?.sources.first.type !=
+                WebPlayerVideoSourceType.iframe.typeText)
+              ValueListenableBuilder(
+                  valueListenable: _videoPlayerController,
+                  builder: (c, snapshot, w) {
+                    if (snapshot.errorMessage != null) {
+                      return widget.errorBuilder == null
+                          ? Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              padding: EdgeInsets.all(24),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                _videoPlayerController.value.errorMessage!,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ))
+                          : widget.errorBuilder!(
+                              c, _videoPlayerController.value.errorMessage!);
+                    } else {
+                      return _videoPlayerController
+                                  .source?.customControlsBuilder ==
+                              null
+                          ? WebVideoPlayerControls(
+                              controller: _videoPlayerController)
+                          : _videoPlayerController
+                              .source!.customControlsBuilder!
+                              .call(_videoPlayerController);
+                    }
+                  }),
           ],
         ),
       ),

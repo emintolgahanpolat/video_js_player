@@ -1,3 +1,8 @@
+## 0.0.16
+
+- Error Screen Builder added
+- 
+
 ## 0.0.15
 
 - videojs mobile ui bug fixed
